@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:albup/features/webview/webview_controller.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,9 +32,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   bool data = await fetchData();
-  if (kDebugMode) {
-    print(data);
-  }
+  print(data);
 
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
@@ -50,7 +49,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '알법디버깅',
+      title: '알법',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff2f81fc)),
         primaryColor: const Color(0xff2f81fc),

@@ -17,7 +17,7 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"
-        android:label="알법디버깅"
+        android:label="알법"
         tools:targetApi="m">
         <activity
             android:name=".MainActivity"

@@ -19,7 +19,7 @@ class WebviewController extends StatefulWidget {
 
 class _WebviewControllerState extends State<WebviewController> {
   // URL 초기화
-  final String url = "http://albup.lawtary.com/";
+  final String url = "https://albup.co.kr/";
 
   // 인덱스 페이지 초기화
   bool isInMainPage = true;
@@ -163,7 +163,7 @@ class _WebviewControllerState extends State<WebviewController> {
                     _viewController = webviewController;
 
                     webviewController.currentUrl().then((url) {
-                      if (url == "http://albup.lawtary.com/") {
+                      if (url == "https://albup.co.kr/") {
                         setState(() {
                           isInMainPage = true;
                         });
@@ -180,7 +180,7 @@ class _WebviewControllerState extends State<WebviewController> {
                   onPageFinished: (String url) async {
 
                     if (url.contains(
-                        "http://albup.lawtary.com/login.php") &&
+                        "https://albup.co.kr/login.php") &&
                         _viewController != null) {
                       final cookies = await _getCookies(_viewController!);
                       await _saveCookies(cookies);
