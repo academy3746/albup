@@ -163,7 +163,7 @@ class _WebviewControllerState extends State<WebviewController> {
                     _viewController = webviewController;
 
                     webviewController.currentUrl().then((url) {
-                      if (url == "https://albup.co.kr/") {
+                      if (url == "$url") {
                         setState(() {
                           isInMainPage = true;
                         });
@@ -180,7 +180,7 @@ class _WebviewControllerState extends State<WebviewController> {
                   onPageFinished: (String url) async {
 
                     if (url.contains(
-                        "https://albup.co.kr/login.php") &&
+                        "${url}login.php") &&
                         _viewController != null) {
                       final cookies = await _getCookies(_viewController!);
                       await _saveCookies(cookies);
