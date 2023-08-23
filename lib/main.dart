@@ -1,6 +1,10 @@
 // ignore_for_file: avoid_print
 
+import 'dart:async';
+
 import 'package:albup/features/webview/webview_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,8 +35,14 @@ Future<bool> fetchData() async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
+
   bool data = await fetchData();
   print(data);
+
+  runZonedGuarded(() async {}, (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack);
+  });
 
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
@@ -40,11 +50,11 @@ void main() async {
 
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-  runApp(const MyApp());
+  runApp(const AlbupApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class AlbupApp extends StatelessWidget {
+  const AlbupApp({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "377450177284",
+    "project_id": "albup-feb04",
+    "storage_bucket": "albup-feb04.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:377450177284:android:dcfb7dfe14bb087f142651",
+        "android_client_info": {
+          "package_name": "kr.sogeum.albup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "377450177284-qbmtqd3n149kmvhberas9s6r37s8qe9r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kr.sogeum.albup",
+            "certificate_hash": "a8e2297067ada5c40a7a94e712e9e3ba733e7db4"
+          }
+        },
+        {
+          "client_id": "377450177284-evui925k7d1itp778khc4td8l774u065.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUpKZsiZwrclmhmP-FwLFknPd4OmKYEg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "377450177284-evui925k7d1itp778khc4td8l774u065.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,14 +1,19 @@
 // ignore_for_file: prefer_collection_literals, avoid_print
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../firebase/msg_controller.dart';
 
 class WebviewController extends StatefulWidget {
   const WebviewController({Key? key}) : super(key: key);
@@ -20,6 +25,8 @@ class WebviewController extends StatefulWidget {
 class _WebviewControllerState extends State<WebviewController> {
   // URL 초기화
   final String url = "https://albup.co.kr/";
+
+  final MsgController _msgController = Get.put(MsgController());
 
   // 인덱스 페이지 초기화
   bool isInMainPage = true;
@@ -75,6 +82,31 @@ class _WebviewControllerState extends State<WebviewController> {
   Future<String?> _loadCookies() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('cookies');
+  }
+
+  JavascriptChannel _flutterWebviewProJavascriptChannel(BuildContext context) {
+    return JavascriptChannel(
+      name: 'flutter_webview_pro',
+      onMessageReceived: (JavascriptMessage message) async {
+        Map<String, dynamic> jsonData = jsonDecode(message.message);
+        if (jsonData['handler'] == 'webviewJavaScriptHandler') {
+          if (jsonData['action'] == 'setUserId') {
+            String userId = jsonData['data']['userId'];
+            GetStorage().write('userId', userId);
+
+            print('@addJavaScriptHandler userId $userId');
+
+            String? token = await _getPushToken();
+            _viewController?.runJavascript('tokenUpdate("$token")');
+          }
+        }
+        setState(() {});
+      },
+    );
+  }
+
+  Future<String?> _getPushToken() async {
+    return await _msgController.getToken();
   }
 
   void launchURL(String url) async {
@@ -153,6 +185,9 @@ class _WebviewControllerState extends State<WebviewController> {
                 child: WebView(
                   initialUrl: url,
                   javascriptMode: JavascriptMode.unrestricted,
+                  javascriptChannels: <JavascriptChannel>[
+                    _flutterWebviewProJavascriptChannel(context),
+                  ].toSet(),
                   onWebResourceError: (error) {
                     print("Error Code: ${error.errorCode}");
                     print("Error Description: ${error.description}");
