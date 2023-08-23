@@ -22,10 +22,7 @@ void launchURL() async {
 Future<bool> fetchData() async {
   bool data = false;
 
-  await Future.delayed(
-      const Duration(
-        milliseconds: 300,
-      ), () {
+  await Future.delayed(const Duration(milliseconds: 300), () {
     data = true;
   });
 
