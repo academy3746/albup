@@ -51,7 +51,7 @@ android {
 
     defaultConfig {
         applicationId keystoreProperties["applicationId"]
-        minSdkVersion 21
+        minSdkVersion 27
         targetSdkVersion 33
         versionCode keystoreProperties["versionCode"].toInteger()
         versionName keystoreProperties["versionName"]

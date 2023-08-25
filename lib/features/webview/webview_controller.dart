@@ -52,9 +52,9 @@ class _WebviewControllerState extends State<WebviewController> {
       PermissionStatus result =
       await Permission.manageExternalStorage.request();
       if (!result.isGranted) {
-        print('저장소 접근 권한이 승인되었습니다.');
+        print('Permission denied by user');
       } else {
-        print('저장소 접근 권한이 거부되었습니다.');
+        print('Permission has submitted.');
       }
     }
   }
