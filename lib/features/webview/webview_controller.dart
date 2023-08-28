@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../firebase/msg_controller.dart';
 
@@ -107,19 +106,6 @@ class _WebviewControllerState extends State<WebviewController> {
 
   Future<String?> _getPushToken() async {
     return await _msgController.getToken();
-  }
-
-  void launchURL(String url) async {
-    final albupUrl = Uri.parse(url);
-
-    if (await canLaunchUrl(albupUrl)) {
-      await launchUrl(
-        albupUrl,
-        mode: LaunchMode.externalNonBrowserApplication,
-      );
-    } else {
-      throw "Can not launch $albupUrl";
-    }
   }
 
   @override
