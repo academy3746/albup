@@ -214,6 +214,24 @@ class _WebviewControllerState extends State<WebviewController> {
                   },
                   onPageFinished: (String url) async {
 
+                    /// Android Soft Keyboard 가림 현상 조치
+                    if (url.contains(url) && _viewController != null) {
+                      await _viewController!.runJavascript("""
+                        (function() {
+                          function scrollToFocusedInput(event) {
+                            const focusedElement = document.activeElement;
+                            if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
+                              setTimeout(() => {
+                                focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                              }, 500);
+                            }
+                          }
+                
+                          document.addEventListener('focus', scrollToFocusedInput, true);
+                        })();
+                      """);
+                    }
+
                     if (url.contains(
                         "${url}login.php") &&
                         _viewController != null) {
