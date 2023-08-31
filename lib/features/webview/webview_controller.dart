@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../firebase/msg_controller.dart';
 
@@ -22,15 +24,15 @@ class WebviewController extends StatefulWidget {
 }
 
 class _WebviewControllerState extends State<WebviewController> {
-  // URL 초기화
+  /// URL 초기화
   final String url = "https://albup.co.kr/";
 
   final MsgController _msgController = Get.put(MsgController());
 
-  // 인덱스 페이지 초기화
+  /// 인덱스 페이지 초기화
   bool isInMainPage = true;
 
-  // 웹뷰 컨트롤러 초기화
+  /// 웹뷰 컨트롤러 초기화
   final Completer<WebViewController> _controller =
   Completer<WebViewController>();
 
@@ -42,9 +44,10 @@ class _WebviewControllerState extends State<WebviewController> {
 
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
     _requestStoragePermission();
+    _getAndroidAppVersion(context);
   }
 
-  // 저장매체 접근 권한 요청
+  /// 저장매체 접근 권한 요청
   void _requestStoragePermission() async {
     PermissionStatus status = await Permission.manageExternalStorage.status;
     if (!status.isGranted) {
@@ -58,31 +61,32 @@ class _WebviewControllerState extends State<WebviewController> {
     }
   }
 
-  // 쿠키 획득
+  /// 쿠키 획득
   Future<String> _getCookies(WebViewController controller) async {
     final String cookies =
     await controller.runJavascriptReturningResult('document.cookie;');
     return cookies;
   }
 
-  // 쿠키 설정
+  /// 쿠키 설정
   Future<void> _setCookies(WebViewController controller, String cookies) async {
     await controller
         .runJavascriptReturningResult('document.cookie="$cookies";');
   }
 
-  // 쿠키 저장
+  /// 쿠키 저장
   Future<void> _saveCookies(String cookies) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('cookies', cookies);
   }
 
-  // 쿠키 로드
+  /// 쿠키 로드
   Future<String?> _loadCookies() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('cookies');
   }
 
+  /// Set JavaScript Channel
   JavascriptChannel _flutterWebviewProJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
       name: 'flutter_webview_pro',
@@ -108,6 +112,100 @@ class _WebviewControllerState extends State<WebviewController> {
     return await _msgController.getToken();
   }
 
+  /// 뒤로 가기 Action
+  Future<bool> _onWillPop() async {
+    if (_viewController == null) {
+      return false;
+    }
+
+    final currentUrl = await _viewController?.currentUrl();
+
+    if (currentUrl == url) {
+      if (!mounted) return false;
+      return showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("앱을 종료하시겠습니까?"),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                  print("앱이 포그라운드에서 종료되었습니다.");
+                },
+                child: const Text("확인"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                  print("앱이 종료되지 않았습니다.");
+                },
+                child: const Text("취소"),
+              ),
+            ],
+          );
+        },
+      ).then((value) => value ?? false);
+    } else if (await _viewController!.canGoBack() && _viewController != null) {
+      _viewController!.goBack();
+      print("이전 페이지로 이동하였습니다.");
+
+      isInMainPage = false;
+      return false;
+    }
+    return false;
+  }
+
+  // Google Play Store Direction
+  void _getAndroidAppVersion(BuildContext context) async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+
+    print("User Device App Version: $version");
+
+    /// Google Play Store Info (Hard Code)
+    const String marketVersion = "1.0.2";
+
+    /// Google Play Store Direction
+    if (version != marketVersion) {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("앱 업데이트 안내"),
+            content: const Text("앱 버전이 최신 상태가 아닙니다.\n업데이트를 위해 마켓으로 이동하시겠습니까?"),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  final Uri marketUri = Uri.parse("market://details?id=kr.sogeum.albup");
+                  final Uri fallbackUri = Uri.parse("https://play.google.com/store/apps/details?id=kr.sogeum.albup");
+
+                  if (await canLaunchUrl(marketUri)) {
+                    await launchUrl(marketUri);
+                  } else if (await canLaunchUrl(fallbackUri)) {
+                    await launchUrl(fallbackUri);
+                  } else {
+                    throw "Can not launch $marketUri";
+                  }
+                  if (!mounted) return;
+                  Navigator.of(context).pop();
+                },
+                child: const Text("확인"),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("취소"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,54 +217,7 @@ class _WebviewControllerState extends State<WebviewController> {
             height: constraints.maxHeight,
             width: constraints.maxWidth,
             child: WillPopScope(
-              onWillPop: () async {
-                if (_viewController == null) {
-                  return false;
-                }
-
-                final currentUrl = await _viewController?.currentUrl();
-
-                if (currentUrl == url) {
-                  if (!mounted) return false;
-                  return showDialog<bool>(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: const Text("앱을 종료하시겠습니까?"),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                              if (kDebugMode) {
-                                print("앱이 포그라운드에서 종료되었습니다.");
-                              }
-                            },
-                            child: const Text("확인"),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                              if (kDebugMode) {
-                                print("앱이 종료되지 않았습니다.");
-                              }
-                            },
-                            child: const Text("취소"),
-                          ),
-                        ],
-                      );
-                    },
-                  ).then((value) => value ?? false);
-                } else if (await _viewController!.canGoBack() &&
-                    _viewController != null) {
-                  _viewController!.goBack();
-                  if (kDebugMode) {
-                    print("이전 페이지로 이동하였습니다.");
-                  }
-                  isInMainPage = false;
-                  return false;
-                }
-                return false;
-              },
+              onWillPop: _onWillPop,
               child: SafeArea(
                 child: WebView(
                   initialUrl: url,
