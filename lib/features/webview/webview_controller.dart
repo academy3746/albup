@@ -84,7 +84,7 @@ class _WebviewControllerState extends State<WebviewController> {
     return prefs.getString('cookies');
   }
 
-  /// Set JavaScript Channel
+  /// Set JavaScript Channel: 웹단 코드 수정 필요
   JavascriptChannel _flutterWebviewProJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
       name: 'flutter_webview_pro',
@@ -106,6 +106,7 @@ class _WebviewControllerState extends State<WebviewController> {
     );
   }
 
+  /// Get User Token
   Future<String?> _getPushToken() async {
     return await _msgController.getToken();
   }
@@ -180,12 +181,12 @@ class _WebviewControllerState extends State<WebviewController> {
               TextButton(
                 onPressed: () async {
                   if (Platform.isAndroid) {
-                    final Uri marketUri =
+                    final Uri playStoreUri =
                         Uri.parse("market://details?id=kr.sogeum.albup");
-                    if (await canLaunchUrl(marketUri)) {
-                      await launchUrl(marketUri);
+                    if (await canLaunchUrl(playStoreUri)) {
+                      await launchUrl(playStoreUri);
                     } else {
-                      throw "Can not launch $marketUri";
+                      throw "Can not launch $playStoreUri";
                     }
                   } else if (Platform.isIOS) {
                     // 추후 개발자 계정 생성 시 올바른 앱 이름과 id 번호 기입할 것
@@ -200,6 +201,7 @@ class _WebviewControllerState extends State<WebviewController> {
                   }
 
                   if (!mounted) return;
+
                   Navigator.of(context).pop();
                 },
                 child: const Text("확인"),
@@ -297,8 +299,7 @@ class _WebviewControllerState extends State<WebviewController> {
                   zoomEnabled: false,
                   gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
                     Factory<EagerGestureRecognizer>(
-                          () => EagerGestureRecognizer(),
-                    ),
+                        () => EagerGestureRecognizer())
                   ].toSet(),
                   gestureNavigationEnabled: true, // IOS Only
                 ),
