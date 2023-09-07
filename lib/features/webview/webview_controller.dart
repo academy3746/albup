@@ -163,7 +163,8 @@ class _WebviewControllerState extends State<WebviewController> {
 
     print("User Device App Version: $version");
 
-    /// Google Play Store Info (Hard Code)
+    /// Google Play Store Info & Version Management
+    /// Hard Coded String
     const String marketVersion = "1.0.2";
 
     /// Google Play Store Direction
