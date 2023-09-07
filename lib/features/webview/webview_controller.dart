@@ -44,7 +44,7 @@ class _WebviewControllerState extends State<WebviewController> {
 
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
     _requestStoragePermission();
-    _getAndroidAppVersion(context);
+    _getAppVersion(context);
   }
 
   /// 저장매체 접근 권한 요청
@@ -156,39 +156,50 @@ class _WebviewControllerState extends State<WebviewController> {
     return false;
   }
 
-  // Google Play Store Direction
-  void _getAndroidAppVersion(BuildContext context) async {
+  /// Store Direction
+  void _getAppVersion(BuildContext context) async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
 
     print("User Device App Version: $version");
 
-    /// Google Play Store Info & Version Management
-    /// Hard Coded String
-    const String marketVersion = "1.0.2";
+    /// Version Management (Hard Coded)
+    const String androidVersion = "1.0.2";
+    const String iosVersion = "1.0.0";
 
-    /// Google Play Store Direction
-    if (version != marketVersion) {
+    if ((Platform.isAndroid && version != androidVersion) ||
+        (Platform.isIOS && version != iosVersion)) {
+
       if (!mounted) return;
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text("앱 업데이트 안내"),
-            content: const Text("앱 버전이 최신 상태가 아닙니다.\n업데이트를 위해 마켓으로 이동하시겠습니까?"),
+            title: const Text("앱 업데이트 정보"),
+            content: const Text("앱 버전이 최신이 아닙니다.\n업데이트를 위해 마켓으로 이동하시겠습니까?"),
             actions: [
               TextButton(
                 onPressed: () async {
-                  final Uri marketUri = Uri.parse("market://details?id=kr.sogeum.albup");
-                  final Uri fallbackUri = Uri.parse("https://play.google.com/store/apps/details?id=kr.sogeum.albup");
-
-                  if (await canLaunchUrl(marketUri)) {
-                    await launchUrl(marketUri);
-                  } else if (await canLaunchUrl(fallbackUri)) {
-                    await launchUrl(fallbackUri);
-                  } else {
-                    throw "Can not launch $marketUri";
+                  if (Platform.isAndroid) {
+                    final Uri marketUri =
+                        Uri.parse("market://details?id=kr.sogeum.albup");
+                    if (await canLaunchUrl(marketUri)) {
+                      await launchUrl(marketUri);
+                    } else {
+                      throw "Can not launch $marketUri";
+                    }
+                  } else if (Platform.isIOS) {
+                    // 추후 개발자 계정 생성 시 올바른 앱 이름과 id 번호 기입할 것
+                    final Uri appStoreUri = Uri.parse(
+                        "https://apps.apple.com/app/랭킹5/id6449736619");
+                    if (await canLaunchUrl(appStoreUri)) {
+                      await launchUrl(appStoreUri);
+                    } else {
+                      throw "Can not launch $appStoreUri";
+                    }
                   }
+
                   if (!mounted) return;
                   Navigator.of(context).pop();
                 },
