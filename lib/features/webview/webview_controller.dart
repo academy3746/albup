@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_collection_literals, avoid_print
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -13,7 +12,6 @@ import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../firebase/msg_controller.dart';
 
 class WebviewController extends StatefulWidget {
@@ -191,8 +189,9 @@ class _WebviewControllerState extends State<WebviewController> {
                     }
                   } else if (Platform.isIOS) {
                     // 추후 개발자 계정 생성 시 올바른 앱 이름과 id 번호 기입할 것
+                    // "https://apps.apple.com/app/알법/id0000000000"
                     final Uri appStoreUri = Uri.parse(
-                        "https://apps.apple.com/app/랭킹5/id6449736619");
+                        "https://youtube.com");
                     if (await canLaunchUrl(appStoreUri)) {
                       await launchUrl(appStoreUri);
                     } else {
