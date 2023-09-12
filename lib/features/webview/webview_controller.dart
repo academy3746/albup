@@ -189,10 +189,9 @@ class _WebviewControllerState extends State<WebviewController> {
                       throw "Can not launch $playStoreUri";
                     }
                   } else if (Platform.isIOS) {
-                    // 추후 개발자 계정 생성 시 올바른 앱 이름과 id 번호 기입할 것
-                    // "https://apps.apple.com/app/알법/id0000000000"
+                    // 해당 다이렉션은 정식 출시 기준으로 제대로 작동함
                     final Uri appStoreUri = Uri.parse(
-                        "https://youtube.com");
+                        "https://apps.apple.com/app/알법/id6465881850");
                     if (await canLaunchUrl(appStoreUri)) {
                       await launchUrl(appStoreUri);
                     } else {

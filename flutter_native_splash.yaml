@@ -1,7 +1,7 @@
-## flutter pub run flutter_native_splash:create
+##flutter pub run flutter_native_splash:create
 flutter_native_splash:
   color: "#37BBFF"
-  image: ""
-  android: true
+  ##image: ""
+  android: false
   ios: true
   fullscreen: true
