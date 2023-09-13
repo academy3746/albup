@@ -6,16 +6,6 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Future<bool> fetchData() async {
-  bool data = false;
-
-  await Future.delayed(const Duration(milliseconds: 300), () {
-    data = true;
-  });
-
-  return data;
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -50,8 +40,8 @@ class AlbupApp extends StatelessWidget {
     return MaterialApp(
       title: '알법',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2F81FC)),
-        primaryColor: const Color(0xFF2F81FC),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF37BBFF)),
+        primaryColor: const Color(0xFF37BBFF),
         useMaterial3: false,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
@@ -59,4 +49,15 @@ class AlbupApp extends StatelessWidget {
       home: const WebviewController(),
     );
   }
+}
+
+/// Splash Screen
+Future<bool> fetchData() async {
+  bool data = false;
+
+  await Future.delayed(const Duration(seconds: 1), () {
+    data = true;
+  });
+
+  return data;
 }
