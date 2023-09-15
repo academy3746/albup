@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 import 'dart:async';
+import 'package:albup/features/onboarding/on_boarding_screen.dart';
 import 'package:albup/features/splash/splash_screen.dart';
 import 'package:albup/features/webview/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,6 +49,7 @@ class AlbupApp extends StatelessWidget {
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
+        OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
       },
     );
   }

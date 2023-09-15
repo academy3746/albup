@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class OnBoardingScreen extends StatefulWidget {
+  static String routeName = "/onboard";
   const OnBoardingScreen({super.key});
 
   @override
