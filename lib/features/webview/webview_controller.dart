@@ -84,7 +84,7 @@ class _WebviewControllerState extends State<WebviewController> {
     return prefs.getString('cookies');
   }
 
-  /// Set JavaScript Channel: 웹단 코드 수정 필요
+  /// Set JavaScript Channel
   JavascriptChannel _flutterWebviewProJavascriptChannel(BuildContext context) {
     return JavascriptChannel(
       name: 'flutter_webview_pro',
@@ -225,83 +225,81 @@ class _WebviewControllerState extends State<WebviewController> {
       backgroundColor: Colors.white,
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          return SizedBox(
-            height: constraints.maxHeight,
-            width: constraints.maxWidth,
-            child: WillPopScope(
-              onWillPop: _onWillPop,
-              child: SafeArea(
-                child: WebView(
-                  initialUrl: url,
-                  javascriptMode: JavascriptMode.unrestricted,
-                  javascriptChannels: <JavascriptChannel>[
-                    _flutterWebviewProJavascriptChannel(context),
-                  ].toSet(),
-                  onWebResourceError: (error) {
-                    print("Error Code: ${error.errorCode}");
-                    print("Error Description: ${error.description}");
-                  },
-                  onWebViewCreated:
-                      (WebViewController webviewController) async {
-                    _controller.complete(webviewController);
-                    _viewController = webviewController;
+          return WillPopScope(
+            onWillPop: _onWillPop,
+            child: SafeArea(
+              child: WebView(
+                initialUrl: url,
+                javascriptMode: JavascriptMode.unrestricted,
+                javascriptChannels: <JavascriptChannel>[
+                  _flutterWebviewProJavascriptChannel(context),
+                ].toSet(),
+                onWebResourceError: (error) {
+                  print("Error Code: ${error.errorCode}");
+                  print("Error Description: ${error.description}");
+                },
+                onWebViewCreated:
+                    (WebViewController webviewController) async {
+                  _controller.complete(webviewController);
+                  _viewController = webviewController;
 
-                    webviewController.currentUrl().then((url) {
-                      if (url == "$url") {
-                        setState(() {
-                          isInMainPage = true;
-                        });
-                      } else {
-                        setState(() {
-                          isInMainPage = false;
-                        });
-                      }
-                    });
-                  },
-                  onPageStarted: (String url) async {
-                    print("Current Page: $url");
-                  },
-                  onPageFinished: (String url) async {
-
-                    /// Android Soft Keyboard 가림 현상 조치
-                    if (url.contains(url) && _viewController != null) {
-                      await _viewController!.runJavascript("""
-                        (function() {
-                          function scrollToFocusedInput(event) {
-                            const focusedElement = document.activeElement;
-                            if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
-                              setTimeout(() => {
-                                focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                              }, 500);
-                            }
-                          }
-                
-                          document.addEventListener('focus', scrollToFocusedInput, true);
-                        })();
-                      """);
-                    }
-
-                    if (url.contains(
-                        "${url}login.php") &&
-                        _viewController != null) {
-                      final cookies = await _getCookies(_viewController!);
-                      await _saveCookies(cookies);
+                  webviewController.currentUrl().then((url) {
+                    if (url == "$url") {
+                      setState(() {
+                        isInMainPage = true;
+                      });
                     } else {
-                      final cookies = await _loadCookies();
-
-                      if (cookies != null) {
-                        await _setCookies(_viewController!, cookies);
-                      }
+                      setState(() {
+                        isInMainPage = false;
+                      });
                     }
-                  },
-                  geolocationEnabled: true,
-                  zoomEnabled: false,
-                  gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-                    Factory<EagerGestureRecognizer>(
-                        () => EagerGestureRecognizer())
-                  ].toSet(),
-                  gestureNavigationEnabled: true, // IOS Only
-                ),
+                  });
+                },
+                onPageStarted: (String url) async {
+                  print("Current Page: $url");
+                },
+                onPageFinished: (String url) async {
+
+                  /// Android Soft Keyboard 가림 현상 조치
+                  if (url.contains(url) && _viewController != null) {
+                    await _viewController!.runJavascript("""
+                      (function() {
+                        function scrollToFocusedInput(event) {
+                          const focusedElement = document.activeElement;
+                          if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
+                            setTimeout(() => {
+                              focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }, 500);
+                          }
+                        }
+              
+                        document.addEventListener('focus', scrollToFocusedInput, true);
+                      })();
+                    """);
+                  }
+
+                  if (url.contains(
+                      "${url}login.php") &&
+                      _viewController != null) {
+                    final cookies = await _getCookies(_viewController!);
+                    await _saveCookies(cookies);
+                  } else {
+                    final cookies = await _loadCookies();
+
+                    if (cookies != null) {
+                      await _setCookies(_viewController!, cookies);
+                    }
+                  }
+                },
+                geolocationEnabled: true,
+                zoomEnabled: false,
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+                  Factory<EagerGestureRecognizer>(
+                      () => EagerGestureRecognizer())
+                ].toSet(),
+                gestureNavigationEnabled: true, // IOS Only
+                /// iPad에서 SNS 로그인 화면으로 다이렉션 되지 않는 현상 조치
+                userAgent: "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1",
               ),
             ),
           );
