@@ -14,14 +14,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../firebase/msg_controller.dart';
 
-class WebviewController extends StatefulWidget {
-  const WebviewController({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<WebviewController> createState() => _WebviewControllerState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _WebviewControllerState extends State<WebviewController> {
+class _MainScreenState extends State<MainScreen> {
   /// URL 초기화
   final String url = "https://albup.co.kr/";
 

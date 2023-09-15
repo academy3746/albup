@@ -1,6 +1,6 @@
 // ignore_for_file: avoid_print
 import 'dart:async';
-import 'package:albup/features/webview/webview_controller.dart';
+import 'package:albup/features/splash/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +10,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-
-  bool data = await fetchData();
-  print(data);
 
   runZonedGuarded(() async {}, (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack);
@@ -46,18 +43,7 @@ class AlbupApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      home: const WebviewController(),
+      home: const SplashScreen(),
     );
   }
-}
-
-/// Splash Screen
-Future<bool> fetchData() async {
-  bool data = false;
-
-  await Future.delayed(const Duration(seconds: 1), () {
-    data = true;
-  });
-
-  return data;
 }
