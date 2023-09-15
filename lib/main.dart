@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 import 'dart:async';
 import 'package:albup/features/splash/splash_screen.dart';
+import 'package:albup/features/webview/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,11 @@ class AlbupApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      initialRoute: SplashScreen.routeName,
+      routes: {
+        SplashScreen.routeName: (context) => const SplashScreen(),
+        MainScreen.routeName: (context) => const MainScreen(),
+      },
     );
   }
 }

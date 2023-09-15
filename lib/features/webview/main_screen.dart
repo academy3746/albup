@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../firebase/msg_controller.dart';
 
 class MainScreen extends StatefulWidget {
+  static String routeName = "/main";
   const MainScreen({Key? key}) : super(key: key);
 
   @override
