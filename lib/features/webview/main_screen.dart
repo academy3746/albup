@@ -299,8 +299,7 @@ class _MainScreenState extends State<MainScreen> {
                       () => EagerGestureRecognizer())
                 ].toSet(),
                 gestureNavigationEnabled: true, // IOS Only
-                /// iPad에서 SNS 로그인 화면으로 다이렉션 되지 않는 현상 조치
-                userAgent: "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1",
+                //userAgent: "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1",
               ),
             ),
           );
