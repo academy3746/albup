@@ -15,9 +15,6 @@ void main() async {
 
   await Firebase.initializeApp();
 
-  /*bool data = await fetchData();
-  print(data);*/
-
   runZonedGuarded(() async {}, (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack);
   });
@@ -50,7 +47,6 @@ class AlbupApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       debugShowCheckedModeBanner: false,
-      //home: const MainScreen(),
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (context) => const SplashScreen(),
@@ -61,18 +57,3 @@ class AlbupApp extends StatelessWidget {
     );
   }
 }
-
-// Old Splash Screen
-/*
-Future<bool> fetchData() async {
-  bool data = false;
-
-  await Future.delayed(
-      const Duration(
-        seconds: 1,
-      ), () {
-    data = true;
-  });
-
-  return data;
-}*/
