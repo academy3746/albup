@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:albup/features/webview/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../onboarding/on_boarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = "/splash";
@@ -17,13 +19,26 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     /// Direct to WebView widget or OnBoarding Screen after 3 seconds
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushNamed(
-        context,
-        MainScreen.routeName,
-        //OnBoardingScreen.routeName,
-      );
-    });
+    Timer(
+      const Duration(seconds: 3),
+      _navigateBasedOnFirstLaunch,
+    );
+  }
+
+  /// 앱을 처음 설치한 유저 판별
+  void _navigateBasedOnFirstLaunch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seenOnboarding = prefs.getBool('seen_onboarding') ?? false;
+
+    if (seenOnboarding) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+    } else {
+      await prefs.setBool('seen_onboarding', true);
+
+      if (!mounted) return;
+      Navigator.of(context).pushReplacementNamed(OnBoardingScreen.routeName);
+    }
   }
 
   @override
