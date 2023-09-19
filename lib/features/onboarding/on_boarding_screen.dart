@@ -40,11 +40,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 child: Icon(
                   Icons.close,
                   color: Colors.grey.shade700,
+                  size: Sizes.size30,
                 ),
               ),
             ),
             Positioned(
-              top: Sizes.size36,
+              top: Sizes.size42,
               left: MediaQuery.of(context).size.width * 0.42,
               child: Row(
                 children: List.generate(
@@ -97,34 +98,42 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            CupertinoButton(
-              color: Theme.of(context).primaryColor,
-              onPressed: () {
-                if (_idx == _images.length - 1) {
-                  Navigator.pushNamed(
-                    context,
-                    KakaoSinkScreen.routeName,
-                  );
-                } else {
-                  _pageController.nextPage(
-                    duration: const Duration(
-                      milliseconds: 300,
-                    ),
-                    curve: Curves.easeInOut,
-                  );
-                }
-              },
-              child: Text(
-                _idx == _images.length - 1 ? "확인" : "다음",
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
+        color: Colors.white,
+        elevation: 0.7,
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: Sizes.size8,
+            bottom: Sizes.size8,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              CupertinoButton(
+                color: Theme.of(context).primaryColor,
+                onPressed: () {
+                  if (_idx == _images.length - 1) {
+                    Navigator.pushNamed(
+                      context,
+                      KakaoSinkScreen.routeName,
+                    );
+                  } else {
+                    _pageController.nextPage(
+                      duration: const Duration(
+                        milliseconds: 300,
+                      ),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                child: Text(
+                  _idx == _images.length - 1 ? "확인" : "다음",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -34,7 +34,6 @@ class Gaps {
   static const v96 = SizedBox(height: Sizes.size96);
 
   // Horizontal Gaps
-
   static const h1 = SizedBox(width: Sizes.size1);
   static const h2 = SizedBox(width: Sizes.size2);
   static const h3 = SizedBox(width: Sizes.size3);

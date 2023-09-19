@@ -41,7 +41,7 @@ class AlbupApp extends StatelessWidget {
     return MaterialApp(
       title: '알법',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF37BBFF)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2F81FC)),
         primaryColor: const Color(0xFF37BBFF),
         useMaterial3: false,
         visualDensity: VisualDensity.adaptivePlatformDensity,
