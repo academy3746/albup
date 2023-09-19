@@ -1,5 +1,5 @@
 import 'package:albup/constants/sizes.dart';
-import 'package:albup/features/webview/kakao_sink_screen.dart';
+import 'package:albup/features/webview/main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +34,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    KakaoSinkScreen.routeName,
+                    //KakaoSinkScreen.routeName,
+                    MainScreen.routeName
                   );
                 },
                 child: Icon(
@@ -114,7 +115,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   if (_idx == _images.length - 1) {
                     Navigator.pushNamed(
                       context,
-                      KakaoSinkScreen.routeName,
+                      MainScreen.routeName
+                      //KakaoSinkScreen.routeName,
                     );
                   } else {
                     _pageController.nextPage(

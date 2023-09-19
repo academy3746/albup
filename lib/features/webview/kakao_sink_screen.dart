@@ -16,9 +16,8 @@ class KakaoSinkScreen extends StatefulWidget {
 }
 
 class _KakaoSinkScreenState extends State<KakaoSinkScreen> {
-  // 카카오 싱크 연결 부분 (추후 활성화)
-  // final String url = "https://albup.co.kr/bbs/login_new.php";
-  final String url = "https://albup.co.kr/bbs/login.php";
+   final String url = "https://albup.co.kr/bbs/login_new.php";
+  //final String url = "https://albup.co.kr/bbs/login.php";
 
   final Completer<WebViewController> _controller =
   Completer<WebViewController>();
