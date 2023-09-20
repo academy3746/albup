@@ -149,6 +149,8 @@ PODS:
     - FlutterMacOS
   - url_launcher_ios (0.0.1):
     - Flutter
+  - webview_cookie_manager (0.0.1):
+    - Flutter
   - "webview_pro_wkwebview (2.7.1+1)":
     - Flutter
 
@@ -164,6 +166,7 @@ DEPENDENCIES:
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - webview_cookie_manager (from `.symlinks/plugins/webview_cookie_manager/ios`)
   - webview_pro_wkwebview (from `.symlinks/plugins/webview_pro_wkwebview/ios`)
 
 SPEC REPOS:
@@ -207,6 +210,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
+  webview_cookie_manager:
+    :path: ".symlinks/plugins/webview_cookie_manager/ios"
   webview_pro_wkwebview:
     :path: ".symlinks/plugins/webview_pro_wkwebview/ios"
 
@@ -237,6 +242,7 @@ SPEC CHECKSUMS:
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  webview_cookie_manager: eaf920722b493bd0f7611b5484771ca53fed03f7
   webview_pro_wkwebview: 38019db9fcfb544f91e1b0e46b11af71a42b6d2c
 
 PODFILE CHECKSUM: 0851863450d79eb2ad073caa2f9fcb586e00c843

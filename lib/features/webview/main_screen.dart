@@ -10,8 +10,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import '../firebase/msg_controller.dart';
 
 class MainScreen extends StatefulWidget {
@@ -37,6 +37,12 @@ class _MainScreenState extends State<MainScreen> {
 
   WebViewController? _viewController;
 
+  /// Import Cookie Manager
+  final WebviewCookieManager cookieManager = WebviewCookieManager();
+  final String cookieValue = "cookieValue";
+  final String domain = "albup.co.kr";
+  final String cookieName = "cookieName";
+
   @override
   void initState() {
     super.initState();
@@ -58,31 +64,6 @@ class _MainScreenState extends State<MainScreen> {
         print('Permission has submitted.');
       }
     }
-  }
-
-  /// 쿠키 획득
-  Future<String> _getCookies(WebViewController controller) async {
-    final String cookies =
-    await controller.runJavascriptReturningResult('document.cookie;');
-    return cookies;
-  }
-
-  /// 쿠키 설정
-  Future<void> _setCookies(WebViewController controller, String cookies) async {
-    await controller
-        .runJavascriptReturningResult('document.cookie="$cookies";');
-  }
-
-  /// 쿠키 저장
-  Future<void> _saveCookies(String cookies) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('cookies', cookies);
-  }
-
-  /// 쿠키 로드
-  Future<String?> _loadCookies() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('cookies');
   }
 
   /// Set JavaScript Channel
@@ -255,12 +236,24 @@ class _MainScreenState extends State<MainScreen> {
                       });
                     }
                   });
+
+                  await cookieManager.getCookies(null);
+
+                  await cookieManager.setCookies([
+                    Cookie(cookieName, cookieValue)
+                      ..domain = domain
+                      ..expires = DateTime.now().add(
+                        const Duration(
+                          days: 90,
+                        ),
+                      )
+                      ..httpOnly = false
+                  ]);
                 },
                 onPageStarted: (String url) async {
                   print("Current Page: $url");
                 },
                 onPageFinished: (String url) async {
-
                   /// Android Soft Keyboard 가림 현상 조치
                   if (url.contains(url) && _viewController != null) {
                     await _viewController!.runJavascript("""
@@ -278,21 +271,7 @@ class _MainScreenState extends State<MainScreen> {
                       })();
                     """);
                   }
-
-                  if (url.contains(
-                      "${url}login.php") &&
-                      _viewController != null) {
-                    final cookies = await _getCookies(_viewController!);
-                    await _saveCookies(cookies);
-                  } else {
-                    final cookies = await _loadCookies();
-
-                    if (cookies != null) {
-                      await _setCookies(_viewController!, cookies);
-                    }
-                  }
                 },
-                geolocationEnabled: true,
                 zoomEnabled: false,
                 gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
                   Factory<EagerGestureRecognizer>(

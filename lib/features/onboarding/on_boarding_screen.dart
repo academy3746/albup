@@ -74,8 +74,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
+            Container(
+              margin: const EdgeInsets.symmetric(
                 horizontal: Sizes.size42,
                 vertical: Sizes.size80 + Sizes.size24,
               ),
@@ -90,7 +90,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   return Image.asset(
                     _images[index],
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                   );
                 },
               ),
