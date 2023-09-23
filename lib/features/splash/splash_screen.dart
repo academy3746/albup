@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     /// Direct to WebView widget or OnBoarding Screen after 3 seconds
     Timer(
-      const Duration(seconds: 2),
+      const Duration(seconds: 3),
       _navigateBasedOnFirstLaunch,
     );
   }
