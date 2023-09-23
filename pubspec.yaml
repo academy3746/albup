@@ -48,7 +48,7 @@ dependencies:
   get_storage: ^2.1.1
   package_info: ^2.0.2
   webview_cookie_manager: ^2.0.6
-  # flutter_native_splash: ^2.3.2
+  flutter_native_splash: ^2.3.2
 
 dev_dependencies:
   flutter_test:

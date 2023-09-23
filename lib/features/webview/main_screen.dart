@@ -146,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
 
     /// Version Management (Hard Coded)
     const String androidVersion = "1.0.2";
-    const String iosVersion = "1.0.0";
+    const String iosVersion = "1.0.1";
 
     if ((Platform.isAndroid && version != androidVersion) ||
         (Platform.isIOS && version != iosVersion)) {
@@ -266,7 +266,6 @@ class _MainScreenState extends State<MainScreen> {
                             }, 500);
                           }
                         }
-              
                         document.addEventListener('focus', scrollToFocusedInput, true);
                       })();
                     """);
@@ -277,8 +276,7 @@ class _MainScreenState extends State<MainScreen> {
                   Factory<EagerGestureRecognizer>(
                       () => EagerGestureRecognizer())
                 ].toSet(),
-                gestureNavigationEnabled: false,
-                //userAgent: "Mozilla/5.0 (iPad; CPU OS 11_0 like Mac OS X) AppleWebKit/604.1.34 (KHTML, like Gecko) Version/11.0 Mobile/15A5341f Safari/604.1",
+                gestureNavigationEnabled: true,
               ),
             ),
           );

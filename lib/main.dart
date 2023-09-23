@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 import 'dart:async';
-import 'package:albup/features/webview/kakao_sink_screen.dart';
 import 'package:albup/features/webview/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -51,7 +50,6 @@ class AlbupApp extends StatelessWidget {
         SplashScreen.routeName: (context) => const SplashScreen(),
         MainScreen.routeName: (context) => const MainScreen(),
         OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
-        KakaoSinkScreen.routeName: (context) => const KakaoSinkScreen(),
       },
     );
   }

@@ -1,7 +1,7 @@
 import 'package:albup/constants/sizes.dart';
-import 'package:albup/features/webview/main_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import '../webview/main_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   static String routeName = "/onboard";
@@ -34,7 +34,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 onPressed: () {
                   Navigator.pushNamed(
                     context,
-                    //KakaoSinkScreen.routeName,
                     MainScreen.routeName
                   );
                 },
@@ -116,7 +115,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     Navigator.pushNamed(
                       context,
                       MainScreen.routeName
-                      //KakaoSinkScreen.routeName,
                     );
                   } else {
                     _pageController.nextPage(
