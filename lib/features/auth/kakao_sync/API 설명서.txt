@@ -1,0 +1,20 @@
+[API Format: jSON]
+
+{access_token: JouZT0aHxGHxkfgflOxK_qfUUTggBmVpMh_JVdi6Cj102gAAAYrW0s32, refresh_token: 4VO54y6LAUSvMw4A_XpydWmL8jD8e9a8vVK5RJQTCj102gAAAYrW0s31, scopes: [account_email, openid, name, phone_number], id_token: eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI2NjVkYTRjZmU3YTk2YmRiNWViOWU3MjA4NTM3YjgwMCIsInN1YiI6IjI2ODMzMDkzNzMiLCJhdXRoX3RpbWUiOjE2OTU4MjEyNTQsImlzcyI6Imh0dHBzOi8va2F1dGgua2FrYW8uY29tIiwiZXhwIjoxNjk1ODY0NDU0LCJpYXQiOjE2OTU4MjEyNTQsImVtYWlsIjoiaHZhYzM3NDZAbmF2ZXIuY29tIn0.nr6iV4F6OcSB6ao_IwudzR1YKQSkhZWUQvTZLbcOqmymTaZBSXGIonBQ_EGE2DFScDpePfsqiWQpDJ4LDMYierbRGWHzQivGHOOYVwFdWJG1vMZrRv_0tL8TKtBXTIBtC4HGsiW3bFYAZz-07mCaVck4fUzU4_H0YLfgZ90wlXTSfjJaFAP4aXsXx4GGv_42rPiUpTOjFEPxKqWZCtKUFLZ6nDuh8h75s0NhO-oxpNSdO2yHK1Fgq_D23Y60WNnqutc65RLrJWTnI2nj0GisU_glSJgwSaKhtykpjM9REEMlaTzmPI6EEUWUg5rtocK8JCdF8vRb-m9ag3tqaCdX5g}
+
+
+1. access_token
+- Kakao API 서버에서 사용자를 인증할 때 사용되는 Key 값입니다.
+- 유저가 Kakao Sync 인증을 요청 한다면 API 서버에서 토큰을 생성한 다음, 이것을 이용한 별도의 프로세스를 수행합니다.
+- 인증 프로세스가 정상적으로 완료되었다면 관리자가 Kakao Sync 서비스에서 설정한 [개인정보 수집 동의 항목]에 포함되는 데이터를 jSON 형식으로 인코딩하여 어플리케이션으로 전송합니다.
+
+2. refresh_token
+- access_token이 만료되었을 경우, 새로운 토큰을 발급 받기 위한 key 값입니다.
+
+3. scopes
+- 관리자가 Kakao Sync 서비스에서 설정한 [개인정보 수집 동의 항목]에 포함되는 데이터입니다.
+- 이메일주소, 성명, 전화번호를 수집하고 있습니다.
+
+4. id_token
+- [scopes]에 담긴 데이터를 안전한 방식으로 암호화 한 key 값입니다.
+- OpenID Connect 프로토콜을 준수합니다.

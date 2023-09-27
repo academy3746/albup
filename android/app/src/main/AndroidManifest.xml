@@ -1,24 +1,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="kr.sogeum.albup">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="kr.sogeum.albup">
 
     <uses-feature
             android:name="android.hardware.camera"
-            android:required="false" />
+            android:required="false"
+            tools:ignore="UnusedAttribute"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+            android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            tools:ignore="ScopedStorage"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
 
+    <!-- 카카오톡 패키지  -->
+    <queries>
+        <package android:name="com.kakao.talk"/>
+    </queries>
+
     <application
-        android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true"
-        android:label="알법"
-        tools:targetApi="m">
+            android:name="${applicationName}"
+            android:icon="@mipmap/ic_launcher"
+            android:label="알법"
+            android:usesCleartextTraffic="true"
+            tools:targetApi="m">
 
         <provider
                 android:name="androidx.core.content.FileProvider"
@@ -31,34 +38,54 @@
         </provider>
 
         <activity
-            android:name=".MainActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
-            android:theme="@style/WebView"
-            android:windowSoftInputMode="adjustResize|stateVisible">
+                android:name=".MainActivity"
+                android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+                android:exported="true"
+                android:hardwareAccelerated="true"
+                android:launchMode="singleTop"
+                android:theme="@style/WebView"
+                android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
-                android:name="io.flutter.embedding.android.NormalTheme"
-                android:resource="@style/NormalTheme" />
+                    android:name="io.flutter.embedding.android.NormalTheme"
+                    android:resource="@style/NormalTheme"/>
             <meta-data
                     android:name="com.google.firebase.messaging.default_notification_channel_id"
                     android:value="high_importance_channel"/>
+
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
+
                 <data
-                    android:host="kr.sogeum.albup"
-                    android:scheme="albup"/>
+                        android:host="kr.sogeum.albup"
+                        android:scheme="albup"/>
             </intent-filter>
         </activity>
+
+        <!-- 카카오 로그인 커스텀 URL 스킴 설정 -->
+        <activity
+                android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+                android:exported="true">
+            <intent-filter android:label="flutter_web_auth">
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <!-- "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식의 앱 실행 스킴 설정 -->
+                <!-- 카카오 로그인 Redirect URI -->
+                <data android:scheme="kakao665da4cfe7a96bdb5eb9e7208537b800"
+                      android:host="oauth"/>
+            </intent-filter>
+        </activity>
+
         <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
+                android:name="flutterEmbedding"
+                android:value="2"/>
     </application>
 </manifest>

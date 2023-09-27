@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'features/onboarding/on_boarding_screen.dart';
 import 'features/splash/splash_screen.dart';
 
@@ -26,6 +27,11 @@ void main() async {
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
+  );
+
+  KakaoSdk.init(
+    nativeAppKey: "665da4cfe7a96bdb5eb9e7208537b800",
+    javaScriptAppKey: "03a6b3234b675b3c84c2b515d6f6cfbb",
   );
 
   runApp(const AlbupApp());
