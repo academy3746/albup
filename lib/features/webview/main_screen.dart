@@ -209,7 +209,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  /// KakaoSync ~ Application 통신
+  /// KakaoSync 토큰 요청 (Application ~ Web Server 통신)
   void _onLoginSuccess(Map<String, dynamic> kakaoLoginData) {
     KakaoSyncAuthController authController = KakaoSyncAuthController();
 
