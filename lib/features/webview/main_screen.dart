@@ -14,7 +14,7 @@ import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import '../firebase/msg_controller.dart';
+import '../firebase/fcm_controller.dart';
 
 /// Kakao Sync TAG
 List<String> serviceTerms = ['service_20230810'];

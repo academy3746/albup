@@ -15,9 +15,9 @@ class KakaoSyncAuthController {
     );
 
     if (response.statusCode == 200) {
-      print("POST Succeed: ${response.body}");
+      print("POST Succeed: ${jsonDecode(response.body)}");
     } else {
-      print("POST Failed...");
+      print("POST Failed: ${jsonDecode(response.body)}");
     }
   }
 }
