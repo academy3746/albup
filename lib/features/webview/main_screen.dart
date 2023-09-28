@@ -313,8 +313,7 @@ class _MainScreenState extends State<MainScreen> {
                       if (request.url.contains(
                           "https://kauth.kakao.com/oauth/authorize")) {
                         if (await isKakaoTalkInstalled()) {
-                          OAuthToken token = await UserApi.instance
-                              .loginWithKakaoTalk(serviceTerms: serviceTerms);
+                          OAuthToken token = await UserApi.instance.loginWithKakaoTalk(serviceTerms: serviceTerms);
                           //print("카카오톡으로 로그인: $token");
 
                           _onLoginSuccess({
