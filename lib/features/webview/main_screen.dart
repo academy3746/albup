@@ -210,6 +210,8 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   /// KakaoSync 토큰 요청 (Application ~ Web Server 통신)
+  /// Android: ^1.0.3 버전 적용 예정
+  /// IOS: ^1.0.2 버전 적용 예정
   void _onLoginSuccess(Map<String, dynamic> kakaoLoginData) {
     KakaoSyncAuthController authController = KakaoSyncAuthController();
 
