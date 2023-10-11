@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
@@ -33,5 +35,8 @@ class AppCookieManager {
         )
         ..httpOnly = false
     ]);
+
+    var debugCookie = await _cookieManager.getCookies(url);
+    print("Cookie load: $debugCookie");
   }
 }

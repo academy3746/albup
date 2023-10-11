@@ -48,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
   /// Import Cookie Manager
   AppCookieManager? cookieManager;
 
-  /// Import Login Process
+  /// Import KaKao Sync Login Process
   final LoginProcess loginProcess = LoginProcess();
 
   /// Import Back Action Handler
