@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
   WebViewController? _viewController;
 
   /// Import Cookie Manager
-  final AppCookieManager cookieManager = AppCookieManager();
+  AppCookieManager? cookieManager;
 
   /// Import Login Process
   final LoginProcess loginProcess = LoginProcess();
@@ -70,6 +70,9 @@ class _MainScreenState extends State<MainScreen> {
     /// App Version Check
     AppVersionCheck appVersionCheck = AppVersionCheck(context);
     appVersionCheck.getAppVersion();
+
+    /// Initialize Cookies
+    cookieManager = AppCookieManager(url);
   }
 
   /// Get User Token
@@ -122,10 +125,11 @@ class _MainScreenState extends State<MainScreen> {
                       });
 
                       /// Cookie Management
-                      await cookieManager.setCookies(
-                        cookieManager.cookieValue,
-                        cookieManager.domain,
-                        cookieManager.cookieValue,
+                      await cookieManager?.setCookies(
+                        cookieManager!.cookieValue,
+                        cookieManager!.domain,
+                        cookieManager!.cookieValue,
+                        cookieManager!.url,
                       );
                     },
                     onPageStarted: (String url) async {

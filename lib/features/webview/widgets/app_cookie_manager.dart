@@ -6,14 +6,22 @@ class AppCookieManager {
   final String _cookieValue = "cookieValue";
   final String _domain = "albup.co.kr";
   final String _cookieName = "cookieName";
+  final String _url;
+
+  AppCookieManager(this._url);
 
   /// Getter
   String get cookieValue => _cookieValue;
+
   String get domain => _domain;
+
   String get cookieName => _cookieName;
 
-  Future<void> setCookies(String cookieValue, String domain, String cookieName) async {
-    await _cookieManager.getCookies(null);
+  String get url => _url;
+
+  Future<void> setCookies(
+      String cookieValue, String domain, String cookieName, String url) async {
+    await _cookieManager.getCookies(url);
 
     await _cookieManager.setCookies([
       Cookie(cookieName, cookieValue)
