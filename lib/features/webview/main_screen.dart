@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:albup/features/auth/kakao_sync/kakao_sync_auth_controller.dart';
-import 'package:albup/features/webview/widgets/app_cookie_managet.dart';
+import 'package:albup/features/webview/widgets/app_cookie_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
