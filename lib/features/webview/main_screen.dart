@@ -63,7 +63,8 @@ class _MainScreenState extends State<MainScreen> {
     _getPushToken();
 
     /// 저장매체 접근 권한
-    StoragePermissionManager permissionManager = StoragePermissionManager(context);
+    StoragePermissionManager permissionManager =
+        StoragePermissionManager(context);
     permissionManager.requestStoragePermission();
 
     /// App Version Check
@@ -107,6 +108,7 @@ class _MainScreenState extends State<MainScreen> {
                         url,
                       );
 
+                      /// Application exit or not
                       webviewController.currentUrl().then((url) {
                         if (url == "$url") {
                           setState(() {
@@ -162,7 +164,8 @@ class _MainScreenState extends State<MainScreen> {
                       if (request.url.contains(
                           "https://kauth.kakao.com/oauth/authorize")) {
                         if (await isKakaoTalkInstalled()) {
-                          OAuthToken token = await UserApi.instance.loginWithKakaoTalk(serviceTerms: serviceTerms);
+                          OAuthToken token = await UserApi.instance
+                              .loginWithKakaoTalk(serviceTerms: serviceTerms);
                           //print("카카오톡으로 로그인: $token");
 
                           loginProcess.onLoginSuccess({
@@ -173,7 +176,8 @@ class _MainScreenState extends State<MainScreen> {
                           });
                         } else {
                           AuthCodeClient.instance.authorize(
-                            redirectUri: "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
+                            redirectUri:
+                                "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
                           );
                           print("카카오 계정으로 로그인");
                         }
