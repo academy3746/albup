@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:albup/features/auth/kakao_sync/kakao_sync_auth_controller.dart';
+import 'package:albup/features/webview/widgets/app_cookie_managet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 import '../firebase/fcm_controller.dart';
 
 /// Kakao Sync TAG
@@ -45,19 +45,17 @@ class _MainScreenState extends State<MainScreen> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
-  WebViewController? _viewController;
+  late WebViewController? _viewController;
 
-  /// Webview Cookie Manager 초기화
-  final WebviewCookieManager cookieManager = WebviewCookieManager();
-  final String cookieValue = "cookieValue";
-  final String domain = "albup.co.kr";
-  final String cookieName = "cookieName";
+  /// Import Cookie Manager
+  final AppCookieManager cookieManager = AppCookieManager();
 
   @override
   void initState() {
     super.initState();
 
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    _getPushToken();
     _requestStoragePermission();
     _getAppVersion(context);
   }
@@ -266,18 +264,12 @@ class _MainScreenState extends State<MainScreen> {
                         }
                       });
 
-                      await cookieManager.getCookies(null);
-
-                      await cookieManager.setCookies([
-                        Cookie(cookieName, cookieValue)
-                          ..domain = domain
-                          ..expires = DateTime.now().add(
-                            const Duration(
-                              days: 90,
-                            ),
-                          )
-                          ..httpOnly = false
-                      ]);
+                      /// Cookie Management
+                      await cookieManager.setCookies(
+                        cookieManager.cookieValue,
+                        cookieManager.domain,
+                        cookieManager.cookieValue,
+                      );
                     },
                     onPageStarted: (String url) async {
                       setState(() {
