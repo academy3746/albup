@@ -31,9 +31,9 @@ class _MainScreenState extends State<MainScreen> {
   final String url = "https://albup.co.kr/";
 
   /// Push Setting 초기화
-  final MsgController _msgController = Get.put(MsgController());
+  final MsgController msgController = Get.put(MsgController());
 
-  /// 인덱스 페이지 초기화 (뒤로가기 / 앱 종료)
+  /// 인덱스 페이지 초기화 (앱 종료)
   bool isInMainPage = true;
 
   /// Page Loading Indicator 초기화
@@ -74,7 +74,7 @@ class _MainScreenState extends State<MainScreen> {
 
   /// Get User Token
   Future<String?> _getPushToken() async {
-    return await _msgController.getToken();
+    return await msgController.getToken();
   }
 
   @override
