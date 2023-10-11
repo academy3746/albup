@@ -1,19 +1,17 @@
 // ignore_for_file: prefer_collection_literals, avoid_print
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:albup/features/auth/kakao_sync/kakao_login_process.dart';
 import 'package:albup/features/webview/widgets/app_cookie_manager.dart';
 import 'package:albup/features/webview/widgets/app_version_checker.dart';
 import 'package:albup/features/webview/widgets/back_action_handler.dart';
+import 'package:albup/features/webview/widgets/permission_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:permission_handler/permission_handler.dart';
 import '../firebase/fcm_controller.dart';
 
 /// Kakao Sync TAG
@@ -50,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
   /// Import Cookie Manager
   final AppCookieManager cookieManager = AppCookieManager();
 
-  /// Import LoginProcess
+  /// Import Login Process
   final LoginProcess loginProcess = LoginProcess();
 
   /// Import Back Action Handler
@@ -61,46 +59,16 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
 
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
+
     _getPushToken();
-    _requestStoragePermission();
+
+    /// 저장매체 접근 권한
+    StoragePermissionManager permissionManager = StoragePermissionManager(context);
+    permissionManager.requestStoragePermission();
+
+    /// App Version Check
     AppVersionCheck appVersionCheck = AppVersionCheck(context);
     appVersionCheck.getAppVersion();
-  }
-
-  /// 저장매체 접근 권한 요청
-  void _requestStoragePermission() async {
-    PermissionStatus status = await Permission.manageExternalStorage.status;
-    if (!status.isGranted) {
-      PermissionStatus result =
-          await Permission.manageExternalStorage.request();
-      if (!result.isGranted) {
-        print('Permission denied by user');
-      } else {
-        print('Permission has submitted.');
-      }
-    }
-  }
-
-  /// GET userId & Firebase token (Web Server ~ Application 통신)
-  JavascriptChannel _flutterWebviewProJavascriptChannel(BuildContext context) {
-    return JavascriptChannel(
-      name: 'flutter_webview_pro',
-      onMessageReceived: (JavascriptMessage message) async {
-        Map<String, dynamic> jsonData = jsonDecode(message.message);
-        if (jsonData['handler'] == 'webviewJavaScriptHandler') {
-          if (jsonData['action'] == 'setUserId') {
-            String userId = jsonData['data']['userId'];
-            GetStorage().write('userId', userId);
-
-            print('@addJavaScriptHandler userId $userId');
-
-            String? token = await _getPushToken();
-            _viewController?.runJavascript('tokenUpdate("$token")');
-          }
-        }
-        setState(() {});
-      },
-    );
   }
 
   /// Get User Token
@@ -123,9 +91,6 @@ class _MainScreenState extends State<MainScreen> {
                   child: WebView(
                     initialUrl: url,
                     javascriptMode: JavascriptMode.unrestricted,
-                    javascriptChannels: <JavascriptChannel>[
-                      _flutterWebviewProJavascriptChannel(context),
-                    ].toSet(),
                     onWebResourceError: (error) {
                       print("Error Code: ${error.errorCode}");
                       print("Error Description: ${error.description}");
@@ -134,7 +99,13 @@ class _MainScreenState extends State<MainScreen> {
                         (WebViewController webviewController) async {
                       _controller.complete(webviewController);
                       _viewController = webviewController;
-                      backActionHandler = BackActionHandler(context, _viewController, url);
+
+                      /// Back Gesture when Webview resources created
+                      backActionHandler = BackActionHandler(
+                        context,
+                        _viewController,
+                        url,
+                      );
 
                       webviewController.currentUrl().then((url) {
                         if (url == "$url") {
