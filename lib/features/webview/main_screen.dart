@@ -2,8 +2,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:albup/features/auth/kakao_sync/kakao_sync_auth_controller.dart';
+import 'package:albup/features/auth/kakao_sync/kakao_login_process.dart';
 import 'package:albup/features/webview/widgets/app_cookie_manager.dart';
+import 'package:albup/features/webview/widgets/app_version_checker.dart';
+import 'package:albup/features/webview/widgets/back_action_handler.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +13,7 @@ import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:package_info/package_info.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../firebase/fcm_controller.dart';
 
 /// Kakao Sync TAG
@@ -45,10 +45,16 @@ class _MainScreenState extends State<MainScreen> {
   final Completer<WebViewController> _controller =
       Completer<WebViewController>();
 
-  late WebViewController? _viewController;
+  WebViewController? _viewController;
 
   /// Import Cookie Manager
   final AppCookieManager cookieManager = AppCookieManager();
+
+  /// Import LoginProcess
+  final LoginProcess loginProcess = LoginProcess();
+
+  /// Import Back Action Handler
+  late final BackActionHandler backActionHandler;
 
   @override
   void initState() {
@@ -57,7 +63,8 @@ class _MainScreenState extends State<MainScreen> {
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
     _getPushToken();
     _requestStoragePermission();
-    _getAppVersion(context);
+    AppVersionCheck appVersionCheck = AppVersionCheck(context);
+    appVersionCheck.getAppVersion();
   }
 
   /// 저장매체 접근 권한 요청
@@ -101,130 +108,6 @@ class _MainScreenState extends State<MainScreen> {
     return await _msgController.getToken();
   }
 
-  /// 뒤로 가기 Action
-  Future<bool> _onWillPop() async {
-    if (_viewController == null) {
-      return false;
-    }
-
-    final currentUrl = await _viewController?.currentUrl();
-
-    if (currentUrl == url) {
-      if (!mounted) return false;
-      return showDialog<bool>(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text("앱을 종료하시겠습니까?"),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                  print("앱이 포그라운드에서 종료되었습니다.");
-                },
-                child: const Text("확인"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                  print("앱이 종료되지 않았습니다.");
-                },
-                child: const Text("취소"),
-              ),
-            ],
-          );
-        },
-      ).then((value) => value ?? false);
-    } else if (await _viewController!.canGoBack() && _viewController != null) {
-      _viewController!.goBack();
-      print("이전 페이지로 이동하였습니다.");
-
-      isInMainPage = false;
-      return false;
-    }
-    return false;
-  }
-
-  /// Store Direction
-  void _getAppVersion(BuildContext context) async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    String version = packageInfo.version;
-
-    print("User Device App Version: $version");
-
-    /// Version Management (Manually)
-    const String androidVersion = "1.0.2";
-    const String iosVersion = "1.0.1";
-
-    if ((Platform.isAndroid && version != androidVersion) ||
-        (Platform.isIOS && version != iosVersion)) {
-      if (!mounted) return;
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("앱 업데이트 정보"),
-            content: const Text("앱 버전이 최신이 아닙니다.\n업데이트를 위해 마켓으로 이동하시겠습니까?"),
-            actions: [
-              TextButton(
-                onPressed: () async {
-                  if (Platform.isAndroid) {
-                    final Uri playStoreUri =
-                        Uri.parse("market://details?id=kr.sogeum.albup");
-                    if (await canLaunchUrl(playStoreUri)) {
-                      await launchUrl(playStoreUri);
-                    } else {
-                      throw "Can not launch $playStoreUri";
-                    }
-                  } else if (Platform.isIOS) {
-                    // 해당 다이렉션은 정식 출시 기준으로 제대로 작동함
-                    final Uri appStoreUri =
-                        Uri.parse("https://apps.apple.com/app/알법/id6465881850");
-                    if (await canLaunchUrl(appStoreUri)) {
-                      await launchUrl(appStoreUri);
-                    } else {
-                      throw "Can not launch $appStoreUri";
-                    }
-                  }
-
-                  if (!mounted) return;
-
-                  Navigator.of(context).pop();
-                },
-                child: const Text("확인"),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("취소"),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  /// KakaoSync 토큰 요청 (Application ~ Web Server 통신)
-  /// Android: ^1.0.3 버전 적용 예정
-  /// IOS: ^1.0.2 버전 적용 예정
-  void _onLoginSuccess(Map<String, dynamic> kakaoLoginData) {
-    KakaoSyncAuthController authController = KakaoSyncAuthController();
-
-    Map<String, dynamic> loginInfo = {
-      "access_token": kakaoLoginData["access_token"],
-      "refresh_token": kakaoLoginData["refresh_token"],
-      "scopes": kakaoLoginData["scopes"],
-      "id_token": kakaoLoginData['id_token'],
-    };
-
-    print("Kakao Sync Login Data: $kakaoLoginData");
-
-    authController.sendLoginInfoToServer(loginInfo);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -235,7 +118,7 @@ class _MainScreenState extends State<MainScreen> {
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
               return WillPopScope(
-                onWillPop: _onWillPop,
+                onWillPop: () => backActionHandler.onWillPop(),
                 child: SafeArea(
                   child: WebView(
                     initialUrl: url,
@@ -251,6 +134,7 @@ class _MainScreenState extends State<MainScreen> {
                         (WebViewController webviewController) async {
                       _controller.complete(webviewController);
                       _viewController = webviewController;
+                      backActionHandler = BackActionHandler(context, _viewController, url);
 
                       webviewController.currentUrl().then((url) {
                         if (url == "$url") {
@@ -310,7 +194,7 @@ class _MainScreenState extends State<MainScreen> {
                           OAuthToken token = await UserApi.instance.loginWithKakaoTalk(serviceTerms: serviceTerms);
                           //print("카카오톡으로 로그인: $token");
 
-                          _onLoginSuccess({
+                          loginProcess.onLoginSuccess({
                             "access_token": token.accessToken,
                             "refresh_token": token.refreshToken,
                             "scopes": token.scopes,
