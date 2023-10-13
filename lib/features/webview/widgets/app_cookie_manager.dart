@@ -42,12 +42,4 @@ class AppCookieManager {
     var debugCookie = await _cookieManager.getCookies(url);
     print("Cookie load: $debugCookie");
   }
-
-  /// Check Returned Cookie Name
-  Future<bool> hasCookies(String cookieName) async {
-    final getCookies = await _cookieManager.getCookies(url);
-
-    return getCookies
-        .any((cookie) => cookie.name == cookieName && cookie.value.isNotEmpty);
-  }
 }
