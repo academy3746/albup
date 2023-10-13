@@ -10,11 +10,12 @@ class StoragePermissionManager {
 
   void requestStoragePermission() async {
     PermissionStatus status = await Permission.manageExternalStorage.status;
-    if (!status.isGranted) {
+    if (status.isGranted) {
       PermissionStatus result =
       await Permission.manageExternalStorage.request();
+
       if (!result.isGranted) {
-        print('Permission denied by user');
+        print('Permission denied by user.');
       } else {
         print('Permission has submitted.');
       }

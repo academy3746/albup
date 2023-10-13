@@ -72,7 +72,7 @@ class _MainScreenState extends State<MainScreen> {
     appVersionCheck.getAppVersion();
 
     /// Initialize Cookies
-    cookieManager = AppCookieManager(url);
+    cookieManager = AppCookieManager(url, url);
   }
 
   /// Get User Token

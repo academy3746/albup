@@ -6,11 +6,14 @@ import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 class AppCookieManager {
   final WebviewCookieManager _cookieManager = WebviewCookieManager();
   final String _cookieValue = "cookieValue";
-  final String _domain = "albup.co.kr";
+  final String _domain;
   final String _cookieName = "cookieName";
   final String _url;
 
-  AppCookieManager(this._url);
+  AppCookieManager(
+    this._domain,
+    this._url,
+  );
 
   /// Getter
   String get cookieValue => _cookieValue;
@@ -38,5 +41,13 @@ class AppCookieManager {
 
     var debugCookie = await _cookieManager.getCookies(url);
     print("Cookie load: $debugCookie");
+  }
+
+  /// Check Returned Cookie Name
+  Future<bool> hasCookies(String cookieName) async {
+    final getCookies = await _cookieManager.getCookies(url);
+
+    return getCookies
+        .any((cookie) => cookie.name == cookieName && cookie.value.isNotEmpty);
   }
 }
