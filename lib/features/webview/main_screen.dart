@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_collection_literals, avoid_print
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:albup/features/auth/kakao_sync/kakao_login_process.dart';
 import 'package:albup/features/webview/widgets/app_cookie_manager.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import '../firebase/fcm_controller.dart';
 
@@ -54,11 +56,39 @@ class _MainScreenState extends State<MainScreen> {
   /// Import Back Action Handler
   late final BackActionHandler backActionHandler;
 
+  /// App ~ Web Server Communication
+  JavascriptChannel _flutterWebviewProJavascriptChannel(BuildContext context) {
+    return JavascriptChannel(
+      name: 'flutter_webview_pro',
+      onMessageReceived: (JavascriptMessage message) async {
+        Map<String, dynamic> jsonData = jsonDecode(message.message);
+        if (jsonData['handler'] == 'webviewJavaScriptHandler') {
+
+          if (jsonData['action'] == 'setUserId') {
+            String userId = jsonData['data']['userId'];
+            GetStorage().write('userId', userId);
+
+            print('@addJavaScriptHandler userId $userId');
+
+            String? token = await _getPushToken();
+
+            if (token != null) {
+              _viewController?.runJavascript('tokenUpdate("$token")');
+            } else {
+              print("Could not obtain token value!");
+            }
+          }
+        }
+        setState(() {});
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
 
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
     _getPushToken();
 
@@ -95,6 +125,9 @@ class _MainScreenState extends State<MainScreen> {
                   child: WebView(
                     initialUrl: url,
                     javascriptMode: JavascriptMode.unrestricted,
+                    javascriptChannels: <JavascriptChannel>[
+                      _flutterWebviewProJavascriptChannel(context),
+                    ].toSet(),
                     onWebResourceError: (error) {
                       print("Error Code: ${error.errorCode}");
                       print("Error Description: ${error.description}");
@@ -144,6 +177,7 @@ class _MainScreenState extends State<MainScreen> {
                       });
 
                       /// Android Soft Keyboard 가림 현상 조치
+                      /// window.scrollBy(0, 350);
                       if (Platform.isAndroid) {
                         if (url.contains(url) && _viewController != null) {
                           await _viewController!.runJavascript("""
@@ -154,8 +188,6 @@ class _MainScreenState extends State<MainScreen> {
                                   setTimeout(() => {
                                     focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                   }, 500);
-                                  
-                                  window.scrollBy(0, 350);
                                 }
                               }
                               document.addEventListener('focus', scrollToFocusedInput, true);
@@ -191,10 +223,12 @@ class _MainScreenState extends State<MainScreen> {
                       return NavigationDecision.navigate;
                     },
                     zoomEnabled: false,
-                    gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
-                      Factory<EagerGestureRecognizer>(
-                          () => EagerGestureRecognizer())
-                    ].toSet(),
+                    gestureRecognizers: Set()
+                      ..add(
+                        Factory<EagerGestureRecognizer>(
+                          () => EagerGestureRecognizer(),
+                        ),
+                      ),
                     gestureNavigationEnabled: true,
                   ),
                 ),
