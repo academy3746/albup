@@ -12,14 +12,14 @@ class KakaoSyncAuthController {
     final response = await http.post(
       Uri.parse(webServerEndPoint),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode(loginInfo),
+      body: json.encode(loginInfo),
     );
 
     /// Response from Web Server to Client
     if (response.statusCode == 200) {
-      print("POST Succeed: ${jsonEncode(response.body)}");
+      print("POST Succeed: ${json.decode(response.body)}");
     } else {
-      print("POST Failed: ${jsonEncode(response.body)}");
+      print("POST Failed: ${json.decode(response.body)}");
     }
   }
 }

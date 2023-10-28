@@ -68,14 +68,14 @@ class _MainScreenState extends State<MainScreen> {
             String userId = jsonData['data']['userId'];
             GetStorage().write('userId', userId);
 
-            print('@addJavaScriptHandler userId $userId');
+            print("Communication Succeed: ${message.message}");
 
             String? token = await _getPushToken();
 
             if (token != null) {
               _viewController?.runJavascript('tokenUpdate("$token")');
             } else {
-              print("Could not obtain token value!");
+              print("Fail to send token to server: ${message.message}");
             }
           }
         }
