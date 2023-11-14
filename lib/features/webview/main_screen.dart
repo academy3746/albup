@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_collection_literals, avoid_print
+// ignore_for_file: prefer_collection_literals,, avoid_print
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -60,7 +60,6 @@ class _MainScreenState extends State<MainScreen> {
       onMessageReceived: (JavascriptMessage message) async {
         Map<String, dynamic> jsonData = jsonDecode(message.message);
         if (jsonData['handler'] == 'webviewJavaScriptHandler') {
-
           if (jsonData['action'] == 'setUserId') {
             String userId = jsonData['data']['userId'];
             GetStorage().write('userId', userId);
@@ -194,32 +193,36 @@ class _MainScreenState extends State<MainScreen> {
                       }
                     },
                     navigationDelegate: (NavigationRequest request) async {
-                      /// Kakao Sync TAG
-                      List<String> serviceTerms = ['service_20230810'];
+                      if (kDebugMode) {
+                        /// Kakao Sync TAG
+                        List<String> serviceTerms = ['service_20230810'];
 
-                      if (request.url.contains(
-                          "https://kauth.kakao.com/oauth/authorize")) {
-                        if (await isKakaoTalkInstalled()) {
-                          OAuthToken token = await UserApi.instance
-                              .loginWithKakaoTalk(serviceTerms: serviceTerms);
-                          //print("카카오톡으로 로그인: $token");
+                        if (request.url.contains(
+                            "https://albup.co.kr/plugin/kakao/redirect_kakao.php")) {
+                          if (await isKakaoTalkInstalled()) {
+                            try {
+                              OAuthToken token = await UserApi.instance
+                                  .loginWithKakaoTalk(serviceTerms: serviceTerms);
 
-                          loginProcess.onLoginSuccess({
-                            "access_token": token.accessToken,
-                            "expires_at": token.expiresAt,
-                            "refresh_token": token.refreshToken,
-                            "refresh_token_expires_at": token.refreshTokenExpiresAt,
-                            "scopes": token.scopes,
-                            "id_token": token.idToken,
-                          });
-                        } else {
-                          await AuthCodeClient.instance.authorize(
-                            redirectUri:
-                                "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
-                          );
-                          print("카카오 계정으로 로그인");
+                              loginProcess.onLoginSuccess(
+                                {
+                                  "access_token": token.accessToken,
+                                  "refresh_token": token.refreshToken,
+                                  "id_token": token.idToken,
+                                },
+                              );
+                            } catch (e) {
+                              print("Error has occurred: $e");
+                            }
+                          } else {
+                            AuthCodeClient.instance.authorize(
+                              redirectUri:
+                              "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
+                            );
+                            print("카카오 계정으로 로그인");
+                          }
+                          return NavigationDecision.prevent;
                         }
-                        return NavigationDecision.prevent;
                       }
 
                       return NavigationDecision.navigate;

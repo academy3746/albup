@@ -8,18 +8,24 @@ class KakaoSyncAuthController {
     /// Web Server Endpoint for processing Kakao Sync Authentication
     const String webServerEndPoint = "https://albup.co.kr/plugin/kakao/redirect_kakao.php";
 
+    print("Server Sending Data: $loginInfo");
+
     /// Send API to Web Server from Client
-    final response = await http.post(
+    var response = await http.post(
       Uri.parse(webServerEndPoint),
       headers: {"Content-Type": "application/json"},
       body: json.encode(loginInfo),
     );
 
-    /// Response from Web Server to Client
-    if (response.statusCode == 200) {
-      print("POST Succeed: ${json.decode(response.body)}");
-    } else {
-      print("POST Failed: ${json.decode(response.body)}");
+    /// Response from Web Server to Client: Just for Debugging
+    try {
+      if (response.statusCode == 200) {
+        print("POST Succeed: ${json.encode(response.statusCode)}");
+      } else {
+        print("Post Failed: ${json.encode(response.statusCode)}");
+      }
+    } catch(e) {
+      print("웹 서버 통신 오류: $e");
     }
   }
 }
