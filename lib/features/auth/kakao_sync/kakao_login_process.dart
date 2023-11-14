@@ -10,12 +10,14 @@ class LoginProcess {
 
     Map<String, dynamic> loginInfo = {
       "access_token": kakaoLoginData["access_token"],
+      "expires_at": kakaoLoginData["expires_at"],
       "refresh_token": kakaoLoginData["refresh_token"],
+      "refresh_token_expires_at": kakaoLoginData["refresh_token_expires_at"],
       "scopes": kakaoLoginData["scopes"],
       "id_token": kakaoLoginData['id_token'],
     };
 
-    print("Kakao Sync Login Data: $kakaoLoginData");
+    print("카카오톡으로 로그인: $kakaoLoginData");
 
     authController.sendLoginInfoToServer(loginInfo);
   }

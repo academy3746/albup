@@ -16,9 +16,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import '../firebase/fcm_controller.dart';
 
-/// Kakao Sync TAG
-List<String> serviceTerms = ['service_20230810'];
-
 class MainScreen extends StatefulWidget {
   static String routeName = "/main";
 
@@ -197,6 +194,9 @@ class _MainScreenState extends State<MainScreen> {
                       }
                     },
                     navigationDelegate: (NavigationRequest request) async {
+                      /// Kakao Sync TAG
+                      List<String> serviceTerms = ['service_20230810'];
+
                       if (request.url.contains(
                           "https://kauth.kakao.com/oauth/authorize")) {
                         if (await isKakaoTalkInstalled()) {
@@ -206,12 +206,14 @@ class _MainScreenState extends State<MainScreen> {
 
                           loginProcess.onLoginSuccess({
                             "access_token": token.accessToken,
+                            "expires_at": token.expiresAt,
                             "refresh_token": token.refreshToken,
+                            "refresh_token_expires_at": token.refreshTokenExpiresAt,
                             "scopes": token.scopes,
                             "id_token": token.idToken,
                           });
                         } else {
-                          AuthCodeClient.instance.authorize(
+                          await AuthCodeClient.instance.authorize(
                             redirectUri:
                                 "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
                           );
