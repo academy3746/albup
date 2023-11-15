@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 class KakaoSyncAuthController {
   Future<void> sendLoginInfoToServer(Map<String, dynamic> loginInfo) async {
     /// Web Server Endpoint for processing Kakao Sync Authentication
-    const String redirectURL = "https://albup.co.kr/plugin/kakao/redirect_kakao.php";
+    //const String redirectURL = "https://albup.co.kr/plugin/kakao/redirect_kakao.php";
+    const String redirectURL = "https://albup.co.kr/test2.php";
 
     print("Server Sending Data: $loginInfo");
 
@@ -21,6 +22,7 @@ class KakaoSyncAuthController {
     try {
       if (response.statusCode == 200) {
         print("POST Succeed: ${response.statusCode}");
+        print("Response from Web Server: ${response.body}");
       } else {
         print("Post Failed: ${response.statusCode}");
       }

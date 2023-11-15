@@ -196,8 +196,8 @@ class _MainScreenState extends State<MainScreen> {
                         /// Kakao Sync TAG
                         List<String> serviceTerms = ['service_20230810'];
 
-                        if (request.url.contains(
-                            "https://albup.co.kr/plugin/kakao/redirect_kakao.php")) {
+                        if (request.url.startsWith(
+                            "https://kauth.kakao.com/oauth/authorize?response_type=code")) {
                           if (await isKakaoTalkInstalled()) {
                             try {
                               OAuthToken token = await UserApi.instance
