@@ -116,126 +116,130 @@ class _MainScreenState extends State<MainScreen> {
             builder: (BuildContext context, BoxConstraints constraints) {
               return WillPopScope(
                 onWillPop: () => backActionHandler.onWillPop(),
-                child: SafeArea(
-                  child: WebView(
-                    initialUrl: url,
-                    javascriptMode: JavascriptMode.unrestricted,
-                    javascriptChannels: <JavascriptChannel>[
-                      _flutterWebviewProJavascriptChannel(context),
-                    ].toSet(),
-                    onWebResourceError: (error) {
-                      print("Error Code: ${error.errorCode}");
-                      print("Error Description: ${error.description}");
-                    },
-                    onWebViewCreated:
-                        (WebViewController webviewController) async {
-                      _controller.complete(webviewController);
-                      _viewController = webviewController;
+                child: SizedBox(
+                  height: constraints.maxHeight,
+                  child: SafeArea(
+                    child: WebView(
+                      initialUrl: url,
+                      javascriptMode: JavascriptMode.unrestricted,
+                      javascriptChannels: <JavascriptChannel>[
+                        _flutterWebviewProJavascriptChannel(context),
+                      ].toSet(),
+                      onWebResourceError: (error) {
+                        print("Error Code: ${error.errorCode}");
+                        print("Error Description: ${error.description}");
+                      },
+                      onWebViewCreated:
+                          (WebViewController webviewController) async {
+                        _controller.complete(webviewController);
+                        _viewController = webviewController;
 
-                      /// Back Gesture when Webview resources created
-                      backActionHandler = BackActionHandler(
-                        context,
-                        _viewController,
-                        url,
-                      );
+                        /// Back Gesture when Webview resources created
+                        backActionHandler = BackActionHandler(
+                          context,
+                          _viewController,
+                          url,
+                        );
 
-                      /// Application exit or not
-                      webviewController.currentUrl().then((url) {
-                        if (url == "$url") {
-                          setState(() {
-                            isInMainPage = true;
-                          });
-                        } else {
-                          setState(() {
-                            isInMainPage = false;
-                          });
-                        }
-                      });
-
-                      /// Cookie Management
-                      await cookieManager?.setCookies(
-                        cookieManager!.cookieValue,
-                        cookieManager!.domain,
-                        cookieManager!.cookieValue,
-                        cookieManager!.url,
-                      );
-                    },
-                    onPageStarted: (String url) async {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      print("Current Page: $url");
-                    },
-                    onPageFinished: (String url) async {
-                      setState(() {
-                        isLoading = false;
-                      });
-
-                      /// Android Soft Keyboard 가림 현상 조치
-                      /// window.scrollBy(0, 350);
-                      if (Platform.isAndroid) {
-                        if (url.contains(url) && _viewController != null) {
-                          await _viewController!.runJavascript("""
-                            (function() {
-                              function scrollToFocusedInput(event) {
-                                const focusedElement = document.activeElement;
-                                if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
-                                  setTimeout(() => {
-                                    focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                                  }, 500);
-                                }
-                              }
-                              document.addEventListener('focus', scrollToFocusedInput, true);
-                            })();
-                    """);
-                        }
-                      }
-                    },
-                    navigationDelegate: (NavigationRequest request) async {
-                      if (kDebugMode) {
-                        /// Kakao Sync TAG
-                        List<String> serviceTerms = ['service_20230810'];
-
-                        if (request.url.startsWith(
-                            "https://kauth.kakao.com/oauth/authorize?response_type=code")) {
-                          if (await isKakaoTalkInstalled()) {
-                            try {
-                              OAuthToken token = await UserApi.instance
-                                  .loginWithKakaoTalk(serviceTerms: serviceTerms);
-
-                              loginProcess.onLoginSuccess(
-                                {
-                                  "access_token": token.accessToken,
-                                  "refresh_token": token.refreshToken,
-                                  "id_token": token.idToken,
-                                },
-                              );
-
-                              print("카카오톡으로 로그인");
-                            } catch (e) {
-                              print("Error has occurred: $e");
-                            }
+                        /// Application exit or not
+                        webviewController.currentUrl().then((url) {
+                          if (url == "$url") {
+                            setState(() {
+                              isInMainPage = true;
+                            });
                           } else {
-                            AuthCodeClient.instance.authorize(
-                              redirectUri:
-                              "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
-                            );
-                            print("카카오 계정으로 로그인");
+                            setState(() {
+                              isInMainPage = false;
+                            });
                           }
-                          return NavigationDecision.prevent;
-                        }
-                      }
+                        });
 
-                      return NavigationDecision.navigate;
-                    },
-                    zoomEnabled: false,
-                    gestureRecognizers: Set()
-                      ..add(
-                        Factory<EagerGestureRecognizer>(
-                          () => EagerGestureRecognizer(),
+                        /// Cookie Management
+                        await cookieManager?.setCookies(
+                          cookieManager!.cookieValue,
+                          cookieManager!.domain,
+                          cookieManager!.cookieValue,
+                          cookieManager!.url,
+                        );
+                      },
+                      onPageStarted: (String url) async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        print("Current Page: $url");
+                      },
+                      onPageFinished: (String url) async {
+                        setState(() {
+                          isLoading = false;
+                        });
+
+                        /// Android Soft Keyboard 가림 현상 조치
+                        /// window.scrollBy(0, 350);
+                        if (Platform.isAndroid) {
+                          if (url.contains(url) && _viewController != null) {
+                            await _viewController!.runJavascript("""
+                              (function() {
+                                function scrollToFocusedInput(event) {
+                                  const focusedElement = document.activeElement;
+                                  if (focusedElement.tagName.toLowerCase() === 'input' || focusedElement.tagName.toLowerCase() === 'textarea') {
+                                    setTimeout(() => {
+                                      focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    }, 500);
+                                  }
+                                }
+                                document.addEventListener('focus', scrollToFocusedInput, true);
+                              })();
+                      """);
+                          }
+                        }
+                      },
+                      navigationDelegate: (NavigationRequest request) async {
+                        if (kDebugMode) {
+                          /// Kakao Sync TAG
+                          List<String> serviceTerms = ['service_20230810'];
+
+                          if (request.url.startsWith(
+                              "https://kauth.kakao.com/oauth/authorize?response_type=code")) {
+                            if (await isKakaoTalkInstalled()) {
+                              try {
+                                OAuthToken token = await UserApi.instance
+                                    .loginWithKakaoTalk(
+                                    serviceTerms: serviceTerms);
+
+                                loginProcess.onLoginSuccess(
+                                  {
+                                    "access_token": token.accessToken,
+                                    "refresh_token": token.refreshToken,
+                                    "id_token": token.idToken,
+                                  },
+                                );
+
+                                print("카카오톡으로 로그인");
+                              } catch (e) {
+                                print("Error has occurred: $e");
+                              }
+                            } else {
+                              AuthCodeClient.instance.authorize(
+                                redirectUri:
+                                "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
+                              );
+                              print("카카오 계정으로 로그인");
+                            }
+                            return NavigationDecision.prevent;
+                          }
+                        }
+
+                        return NavigationDecision.navigate;
+                      },
+                      zoomEnabled: false,
+                      gestureRecognizers: Set()
+                        ..add(
+                          Factory<EagerGestureRecognizer>(
+                                () => EagerGestureRecognizer(),
+                          ),
                         ),
-                      ),
-                    gestureNavigationEnabled: true,
+                      gestureNavigationEnabled: true,
+                    ),
                   ),
                 ),
               );
