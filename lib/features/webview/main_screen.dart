@@ -210,6 +210,8 @@ class _MainScreenState extends State<MainScreen> {
                                   "id_token": token.idToken,
                                 },
                               );
+
+                              print("카카오톡으로 로그인");
                             } catch (e) {
                               print("Error has occurred: $e");
                             }
