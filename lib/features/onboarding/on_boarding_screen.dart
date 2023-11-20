@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../webview/main_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
-  static String routeName = "/onboard";
+  static const String routeName = "/onboard";
 
   const OnBoardingScreen({super.key});
 

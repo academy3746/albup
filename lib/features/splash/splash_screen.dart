@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../onboarding/on_boarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  static String routeName = "/splash";
+  static const String routeName = "/splash";
 
   const SplashScreen({super.key});
 

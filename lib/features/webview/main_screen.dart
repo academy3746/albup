@@ -10,13 +10,14 @@ import 'package:albup/features/webview/widgets/permission_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import '../firebase/fcm_controller.dart';
 
 class MainScreen extends StatefulWidget {
-  static String routeName = "/main";
+  static const String routeName = "/main";
 
   const MainScreen({Key? key}) : super(key: key);
 
@@ -196,34 +197,62 @@ class _MainScreenState extends State<MainScreen> {
                       navigationDelegate: (NavigationRequest request) async {
                         if (kDebugMode) {
                           /// Kakao Sync TAG
-                          List<String> serviceTerms = ['service_20230810'];
+                          List<String> serviceTerms = [
+                            'account_email',
+                            'name',
+                            'phone_number',
+                          ];
 
-                          if (request.url.startsWith(
-                              "https://kauth.kakao.com/oauth/authorize?response_type=code")) {
+                          if (request.url.contains(
+                              "https://kauth.kakao.com/oauth/authorize")) {
+                            /// 카카오톡 로그인 Request
                             if (await isKakaoTalkInstalled()) {
                               try {
                                 OAuthToken token = await UserApi.instance
                                     .loginWithKakaoTalk(
-                                    serviceTerms: serviceTerms);
+                                        serviceTerms: serviceTerms);
 
                                 loginProcess.onLoginSuccess(
                                   {
                                     "access_token": token.accessToken,
                                     "refresh_token": token.refreshToken,
                                     "id_token": token.idToken,
+                                    "scope": token.scopes,
                                   },
                                 );
 
-                                print("카카오톡으로 로그인");
+                                print(
+                                    "Request Kakao Talk Login Process to Web Server");
                               } catch (e) {
-                                print("Error has occurred: $e");
+                                print("카카오톡 로그인 요청 실패: $e");
+
+                                /// 사용자에 의한 취소 처리 Handling
+                                if (e is PlatformException &&
+                                    e.code == 'CANCELED') {
+                                  print("카카오톡 로그인 요청 취소");
+
+                                  return NavigationDecision.prevent;
+                                }
+
+                                /// 카카오톡 미설치 시, 카카오 계정으로 로그인
+                                try {
+                                  print("카카오 계정으로 로그인");
+
+                                  await UserApi.instance
+                                      .loginWithKakaoAccount();
+                                } catch (e) {
+                                  print("카카오 계정 로그인 실패: $e");
+                                }
                               }
                             } else {
-                              AuthCodeClient.instance.authorize(
-                                redirectUri:
-                                "https://albup.co.kr/plugin/kakao/redirect_kakao.php",
-                              );
-                              print("카카오 계정으로 로그인");
+                              /// 카카오톡 미설치 시, 카카오 계정으로 로그인
+                              try {
+                                print("카카오 계정으로 로그인");
+
+                                await UserApi.instance.loginWithKakaoAccount();
+                              } catch (e) {
+                                print("카카오 계정 로그인 실패: $e");
+                              }
                             }
                             return NavigationDecision.prevent;
                           }
@@ -235,7 +264,7 @@ class _MainScreenState extends State<MainScreen> {
                       gestureRecognizers: Set()
                         ..add(
                           Factory<EagerGestureRecognizer>(
-                                () => EagerGestureRecognizer(),
+                            () => EagerGestureRecognizer(),
                           ),
                         ),
                       gestureNavigationEnabled: true,

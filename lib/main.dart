@@ -18,6 +18,11 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack);
   });
 
+  KakaoSdk.init(
+    nativeAppKey: "665da4cfe7a96bdb5eb9e7208537b800",
+    javaScriptAppKey: "03a6b3234b675b3c84c2b515d6f6cfbb",
+  );
+
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp],
   );
@@ -27,11 +32,6 @@ void main() async {
       systemNavigationBarColor: Colors.white,
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
-  );
-
-  KakaoSdk.init(
-    nativeAppKey: "665da4cfe7a96bdb5eb9e7208537b800",
-    javaScriptAppKey: "03a6b3234b675b3c84c2b515d6f6cfbb",
   );
 
   runApp(const AlbupApp());

@@ -12,6 +12,7 @@ class LoginProcess {
       "access_token": kakaoLoginData["access_token"],
       "refresh_token": kakaoLoginData["refresh_token"],
       "id_token": kakaoLoginData['id_token'],
+      "scope": kakaoLoginData["scope"]
     };
 
     await authController.sendLoginInfoToServer(loginInfo);
