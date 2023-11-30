@@ -7,6 +7,7 @@ import 'package:albup/features/webview/widgets/app_cookie_manager.dart';
 import 'package:albup/features/webview/widgets/app_version_checker.dart';
 import 'package:albup/features/webview/widgets/back_action_handler.dart';
 import 'package:albup/features/webview/widgets/permission_manager.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import '../firebase/fcm_controller.dart';
 
 class MainScreen extends StatefulWidget {
@@ -104,6 +107,19 @@ class _MainScreenState extends State<MainScreen> {
   /// Get User Token
   Future<String?> _getPushToken() async {
     return await msgController.getToken();
+  }
+
+  /// Download PDF File in App
+  Future<void> _downloadFile(String url) async {
+    final dio = Dio();
+
+    final dir = await getExternalStorageDirectory();
+
+    final path = "${dir?.path}/$url.pdf";
+
+    await dio.download(url, path);
+
+    OpenFile.open(path);
   }
 
   @override
@@ -256,6 +272,13 @@ class _MainScreenState extends State<MainScreen> {
                             }
                             return NavigationDecision.prevent;
                           }
+                        }
+
+                        if (request.url.contains("/data/judgment_pdf_drunk/")) {
+
+                          await _downloadFile(request.url);
+
+                          return NavigationDecision.prevent;
                         }
 
                         return NavigationDecision.navigate;
