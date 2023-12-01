@@ -18,7 +18,7 @@ class AppVersionCheck {
 
     /// Version Management (Manually)
     const String androidVersion = "1.0.2";
-    const String iosVersion = "1.0.1";
+    const String iosVersion = "1.0.2";
 
     if ((Platform.isAndroid && version != androidVersion) ||
         (Platform.isIOS && version != iosVersion)) {
