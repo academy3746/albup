@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:albup/features/auth/kakao_sync/kakao_login_process.dart';
+import 'package:albup/features/firebase/fcm_controller.dart';
 import 'package:albup/features/webview/widgets/app_cookie_manager.dart';
 import 'package:albup/features/webview/widgets/app_version_checker.dart';
 import 'package:albup/features/webview/widgets/back_action_handler.dart';
@@ -17,7 +18,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
-import '../firebase/fcm_controller.dart';
 
 class MainScreen extends StatefulWidget {
   static const String routeName = "/main";
