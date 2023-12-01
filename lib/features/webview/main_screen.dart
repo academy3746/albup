@@ -202,7 +202,6 @@ class _MainScreenState extends State<MainScreen> {
                                     setTimeout(() => {
                                       focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                     }, 500);
-                                    window.scrollBy(0, 350);
                                   }
                                 }
                                 document.addEventListener('focus', scrollToFocusedInput, true);
