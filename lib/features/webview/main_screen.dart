@@ -14,6 +14,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_webview_pro/webview_flutter.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:open_file/open_file.dart';
@@ -33,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   final String url = "https://albup.co.kr/";
 
   /// Push Setting 초기화
-  final MsgController msgController = MsgController();
+  MsgController msgController = Get.put(MsgController());
 
   /// 인덱스 페이지 초기화 (앱 종료)
   bool isInMainPage = true;
