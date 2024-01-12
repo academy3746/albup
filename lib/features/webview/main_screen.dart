@@ -276,7 +276,6 @@ class _MainScreenState extends State<MainScreen> {
                         }
 
                         if (request.url.contains("/data/judgment_pdf_drunk/")) {
-
                           await _downloadFile(request.url);
 
                           return NavigationDecision.prevent;
