@@ -139,7 +139,7 @@ class _MainScreenState extends State<MainScreen> {
         children: [
           LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              return FutureBuilder(
+              return FutureBuilder<String>(
                 future: _getUserAgent(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
