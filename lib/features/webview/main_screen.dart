@@ -63,11 +63,12 @@ class _MainScreenState extends State<MainScreen> {
         if (jsonData['handler'] == 'webviewJavaScriptHandler') {
           if (jsonData['action'] == 'setUserId') {
             String userId = jsonData['data']['userId'];
+
             GetStorage().write('userId', userId);
 
             print("Communication Succeed: ${message.message}");
 
-            String? token = await _getPushToken();
+            String? token = await msgController.getToken();
 
             if (token != null) {
               _viewController?.runJavascript('tokenUpdate("$token")');
@@ -87,8 +88,6 @@ class _MainScreenState extends State<MainScreen> {
 
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
 
-    _getPushToken();
-
     /// 저장매체 접근 권한
     StoragePermissionManager permissionManager =
         StoragePermissionManager(context);
@@ -100,11 +99,6 @@ class _MainScreenState extends State<MainScreen> {
 
     /// Initialize Cookies
     cookieManager = AppCookieManager(url, url);
-  }
-
-  /// Get User Token
-  Future<String?> _getPushToken() async {
-    return await msgController.getToken();
   }
 
   /// Download PDF File in App

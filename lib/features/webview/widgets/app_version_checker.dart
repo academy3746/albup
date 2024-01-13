@@ -17,8 +17,8 @@ class AppVersionCheck {
     print("User Device App Version: $version");
 
     /// Version Management (Manually)
-    const String androidVersion = "1.0.2";
-    const String iosVersion = "1.0.2";
+    const String androidVersion = "1.0.3";
+    const String iosVersion = "1.0.3";
 
     if ((Platform.isAndroid && version != androidVersion) ||
         (Platform.isIOS && version != iosVersion)) {
