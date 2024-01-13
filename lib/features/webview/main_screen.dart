@@ -120,6 +120,7 @@ class _MainScreenState extends State<MainScreen> {
     OpenFile.open(path);
   }
 
+  /// Manipulate User Agent for Kakao Login
   Future<String> _getUserAgent() async {
     var userAgent = "undefined";
 
