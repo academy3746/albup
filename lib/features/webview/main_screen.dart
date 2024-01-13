@@ -117,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
 
     await dio.download(url, path);
 
-    OpenFile.open(path);
+    await OpenFile.open(path);
   }
 
   /// Manipulate User Agent for Kakao Login
