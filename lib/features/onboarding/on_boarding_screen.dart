@@ -112,7 +112,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 color: Theme.of(context).primaryColor,
                 onPressed: () {
                   if (_idx == _images.length - 1) {
-                    Navigator.pushNamed(
+                    Navigator.pushReplacementNamed(
                       context,
                       MainScreen.routeName
                     );
