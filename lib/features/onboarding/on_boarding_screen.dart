@@ -32,7 +32,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             Positioned(
               child: CupertinoButton(
                 onPressed: () {
-                  Navigator.pushNamed(
+                  Navigator.pushReplacementNamed(
                     context,
                     MainScreen.routeName
                   );

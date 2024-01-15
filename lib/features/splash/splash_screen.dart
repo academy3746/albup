@@ -32,12 +32,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (seenOnboarding) {
       if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
+      await Navigator.of(context).pushReplacementNamed(MainScreen.routeName);
     } else {
       await prefs.setBool('seen_onboarding', true);
 
       if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed(OnBoardingScreen.routeName);
+      await Navigator.of(context).pushReplacementNamed(OnBoardingScreen.routeName);
     }
   }
 
