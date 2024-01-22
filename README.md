@@ -25,12 +25,12 @@
 
 # Issue01
 Android 앱의 경우, 시스템의 소프트 키보드가 Input 입력필드를 가려버리는 현상 발생
-- [lib/features/webview/main_screen.dart] 201 Line
+- <a href="https://github.com/academy3746/albup/blob/main/lib/features/webview/main_screen.dart#L201" target="_blank">[lib/features/webview/main_screen.dart]</a> 201 Line
 - 사용자의 입력필드 터치 인식, 해당 영역으로 자동 Focus 되도록 JavaScript 작성
 
 # Issue02
 웹 앱에서 제공하는 PDF 파일 다운로드 or 열람 지원 요청
-- <a href="https://github.com/academy3746/albup/blob/main/lib/features/webview/main_screen.dart#L201" target="_blank">[lib/features/webview/main_screen.dart]</a> 105 Line '_downloadFile()'
+- <a href="https://github.com/academy3746/albup/blob/main/lib/features/webview/main_screen.dart#L105" target="_blank">[lib/features/webview/main_screen.dart]</a> 105 Line '_downloadFile()'
 - dio / path_provider / url_launcher 플러그인을 활용
 - <a href="https://github.com/academy3746/albup/blob/main/lib/features/webview/main_screen.dart#L264" target="_blank">[lib/features/webview/main_screen.dart]</a> 264 Line URL 처리
 
