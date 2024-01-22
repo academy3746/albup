@@ -1,7 +1,7 @@
 # Introduction
 법률 상담 플랫폼 알법 (Android / IOS / Web)
 
-# External Plugin List (pubspec.yaml)
+# External Plugin List (<a href="https://github.com/academy3746/albup/blob/main/pubspec.yaml" target="_blank">pubspec.yaml</a>)
 1. cupertino_icons: ^1.0.2
 2. permission_handler: ^10.4.3
 3. shared_preferences: ^2.2.0
