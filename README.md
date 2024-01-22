@@ -1,5 +1,5 @@
 # Introduction
-1. 법률 상담 플랫폼, 알법 (<a href="https://play.google.com/store/apps/details?id=kr.sogeum.albup&pli=1">Android</a> / <a href="https://apps.apple.com/app/알법/id6465881850">IOS</a> / <a href="https://albup.co.kr/">Web</a>)
+법률 상담 플랫폼, 알법 (<a href="https://play.google.com/store/apps/details?id=kr.sogeum.albup&pli=1">Android</a> / <a href="https://apps.apple.com/app/알법/id6465881850">IOS</a> / <a href="https://albup.co.kr/">Web</a>)
 
 # External Plugin List (pubspec.yaml)
 1. cupertino_icons: ^1.0.2
