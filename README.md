@@ -1,5 +1,5 @@
 # Introduction
-법률 상담 플랫폼 알법 (Android / IOS / Web)
+법률 상담 플랫폼 알법 (<a href="market://details?id=kr.sogeum.albup" target="_blank">Android</a> / <a href="https://apps.apple.com/app/알법/id6465881850" target="_blank">IOS</a> / <a href="https://albup.co.kr/" target="_blank">Web</a>)
 
 # External Plugin List (pubspec.yaml)
 1. cupertino_icons: ^1.0.2
