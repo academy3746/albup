@@ -1,5 +1,5 @@
 # Introduction
-1. 법률 상담 플랫폼, 알법
+1. 법률 상담 플랫폼, 알법 (외주 프로젝트)
 2. Service Scope: <a href="https://albup.co.kr">Web</a> / <a href="https://play.google.com/store/apps/details?id=kr.sogeum.albup&pli=1">Android</a> / <a href="https://apps.apple.com/app/알법/id6465881850">IOS</a>
 3. Application Developing Tool: Flutter / Android Studio / X Code
 4. Server Configuration: Ubuntu / AWS
