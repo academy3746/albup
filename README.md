@@ -3,7 +3,7 @@
 2. Service Scope: <a href="https://albup.co.kr">Web</a> / <a href="https://play.google.com/store/apps/details?id=kr.sogeum.albup&pli=1">Android</a> / <a href="https://apps.apple.com/app/알법/id6465881850">IOS</a>
 3. Application Developing Tool: Flutter / Android Studio / X Code
 4. Server Configuration: Ubuntu / AWS
-5. BackEnd Developing Tool: PHP / 그누보드 (CMS)
+5. BackEnd Developing Tool: PHP / PHPMyAdmin (RDBMS) / 그누보드 (CMS)
 
 # External Plugin List (pubspec.yaml)
 1. cupertino_icons: ^1.0.2
