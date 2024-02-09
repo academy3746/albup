@@ -1,11 +1,11 @@
 # Introduction
-1. 법률 상담 플랫폼, 알법 (외주 프로젝트)
-2. Service Scope: <a href="https://albup.co.kr">Web</a> / <a href="https://play.google.com/store/apps/details?id=kr.sogeum.albup&pli=1">Android</a> / <a href="https://apps.apple.com/app/알법/id6465881850">IOS</a>
-3. Application Developing Tool: Flutter / Android Studio / X Code
-4. Server Configuration: Ubuntu / AWS
-5. BackEnd Developing Tool: PHP / PHPMyAdmin (RDBMS) / 그누보드 (CMS)
+법률 상담 플랫폼, 알법 (외주 프로젝트)
+1. Service Scope: <a href="https://albup.co.kr">Web</a> / <a href="https://play.google.com/store/apps/details?id=kr.sogeum.albup&pli=1">Android</a> / <a href="https://apps.apple.com/app/알법/id6465881850">IOS</a>
+2. Application Developing Tool: Flutter / Android Studio / X Code
+3. Server Configuration: Ubuntu / AWS
+4. BackEnd Developing Tool: PHP / PHPMyAdmin (RDBMS) / 그누보드 (CMS)
 
-# External Plugin List (pubspec.yaml)
+# External Plugin List
 1. cupertino_icons: ^1.0.2
 2. permission_handler: ^10.4.3
 3. shared_preferences: ^2.2.0
