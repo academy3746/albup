@@ -4,6 +4,9 @@
 2. Application Developing Tool: Flutter / Android Studio / X Code
 3. Server Configuration: Ubuntu / AWS
 4. BackEnd Developing Tool: PHP / PHPMyAdmin (RDBMS) / 그누보드 (CMS)
+5. Native App Performance
+- 인 앱 Push 서비스: Firebase Cloud Messaging
+- Login with KakaoTalk: Kakao Flutter SDK User
 
 # External Plugin List
 1. cupertino_icons: ^1.0.2
